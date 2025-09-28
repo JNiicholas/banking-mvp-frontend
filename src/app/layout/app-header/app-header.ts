@@ -161,7 +161,7 @@ export class AppHeaderComponent implements OnInit {
       {
         label: 'Admin',
         icon: 'pi pi-cog',
-        visible: this.auth.hasRealmRole('Admin'),
+        visible: this.auth.hasRealmRole('admin'),
         styleClass: 'menu-item-blue',
         items: [
           [
