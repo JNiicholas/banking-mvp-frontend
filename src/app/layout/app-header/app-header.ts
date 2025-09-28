@@ -159,6 +159,22 @@ export class AppHeaderComponent implements OnInit {
         ]
       },
       {
+        label: 'Kunde Overblik',
+        icon: 'pi pi-user',
+        visible: this.auth.hasRealmRole('user'),
+        styleClass: 'menu-item-blue',
+        items: [
+          [
+            {
+              label: 'Account',
+              items: [
+                { label: 'Overview', icon: 'pi pi-list', command: () => this.router.navigate(['/customer/overview'], { skipLocationChange: true, replaceUrl: true }) }
+              ]
+            }
+          ]
+        ]
+      },
+      {
         label: 'Admin',
         icon: 'pi pi-cog',
         visible: this.auth.hasRealmRole('admin'),
