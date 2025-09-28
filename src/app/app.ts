@@ -2,7 +2,7 @@ import { Component, signal, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Example } from './components/example/example';
 import { LoginButtonComponent } from './auth/login-button/login-button';
-import { DividendTickerHistory } from './components/dividends/dividend-ticker-history/dividend-ticker-history';
+//import { DividendTickerHistory } from './components/dividends/dividend-ticker-history/dividend-ticker-history';
 import { AppHeaderComponent } from './layout/app-header/app-header';
 import { AppFooterComponent } from './layout/app-footer/app-footer';
 import { MapboxMapComponent } from './features/mapbox-map/mapbox-map';
