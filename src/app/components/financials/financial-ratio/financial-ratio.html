@@ -1,0 +1,120 @@
+<!-- Header -->
+<h2 class="page-title">Financial ratios</h2>
+
+<!-- Toolbar: autocomplete + periodicity toggle -->
+<div class="toolbar">
+  <div class="auto-wrap">
+    <app-ticker-autocomplete
+      [placeholder]="'Search ticker…'"
+      (picked)="onPick($event)"
+      (cleared)="onClear()">
+    </app-ticker-autocomplete>
+  </div>
+  <div class="date-wrap">
+    <p-datepicker
+      [(ngModel)]="rangeDates"
+      selectionMode="range"
+      [readonlyInput]="true"
+      (ngModelChange)="onRangeChange()">
+    </p-datepicker>
+  </div>
+  <div class="toggle-wrap">
+    <p-toggleButton
+      onLabel="Annual"
+      offLabel="Quarterly"
+      [(ngModel)]="checked"
+      (onChange)="onPeriodicityChanged()">
+    </p-toggleButton>
+  </div>
+</div>
+
+<!-- Empty state -->
+<div *ngIf="!ratios" class="empty">
+  <p>Select a ticker to view ratios.</p>
+</div>
+
+<!-- Ratios content -->
+<div *ngIf="ratios as r" class="ratios">
+  <!-- Meta -->
+  <section class="card">
+    <h3>Meta</h3>
+    <div class="grid">
+      <div><strong>Ticker:</strong> {{ r.meta?.ticker }}</div>
+      <div><strong>Company:</strong> {{ r.meta?.company_name || '—' }}</div>
+      <div><strong>Currency:</strong> {{ r.meta?.currency || '—' }}</div>
+      <div><strong>Unit:</strong> {{ r.meta?.unit || '—' }}</div>
+      <div><strong>Periodicity:</strong> {{ r.meta?.periodicity }}</div>
+      <div><strong>As of:</strong> {{ r.meta?.asof | date:'yyyy-MM-dd' }}</div>
+      <div><strong>Version:</strong> {{ r.meta?.version || '—' }}</div>
+    </div>
+  </section>
+
+  <!-- Period table -->
+  <section class="card" *ngIf="r.periods?.length">
+    <h3>Ratios by period</h3>
+    <div class="table-scroll">
+      <table class="wide">
+        <thead>
+          <tr>
+            <th>Fiscal</th>
+            <th>End</th>
+            <th class="num">Gross</th>
+            <th class="num">Operating</th>
+            <th class="num">Net</th>
+            <th class="num">Current</th>
+            <th class="num">Quick</th>
+            <th class="num">Debt/Equity</th>
+            <th class="num">ROA</th>
+            <th class="num">ROE</th>
+            <th class="num">Revenue YoY</th>
+            <th class="num">EPS YoY</th>
+            <th class="num">OCF Margin</th>
+            <th class="num">Free CF</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of r.periods">
+            <td>{{ p['fiscal_year'] }} {{ p['fiscal_period'] || 'FY' }}</td>
+            <td>{{ p['period_end_date'] | date:'yyyy-MM-dd' }}</td>
+            <td class="num">{{ p['ratios']?.['gross_margin'] | percent:'1.1-1' }}</td>
+            <td class="num">{{ p['ratios']?.['operating_margin'] | percent:'1.1-1' }}</td>
+            <td class="num">{{ p['ratios']?.['net_margin'] | percent:'1.1-1' }}</td>
+            <td class="num">{{ p['ratios']?.['current_ratio'] | number:'1.2-2' }}</td>
+            <td class="num">{{ p['ratios']?.['quick_ratio'] | number:'1.2-2' }}</td>
+            <td class="num">{{ p['ratios']?.['debt_to_equity'] | number:'1.2-2' }}</td>
+            <td class="num">{{ p['ratios']?.['return_on_assets'] | percent:'1.1-1' }}</td>
+            <td class="num">{{ p['ratios']?.['return_on_equity'] | percent:'1.1-1' }}</td>
+            <td class="num" [class.pos]="(p['ratios']?.['revenue_yoy'] ?? 0) >= 0" [class.neg]="(p['ratios']?.['revenue_yoy'] ?? 0) < 0">{{ p['ratios']?.['revenue_yoy'] | percent:'1.1-1' }}</td>
+            <td class="num" [class.pos]="(p['ratios']?.['eps_yoy'] ?? 0) >= 0" [class.neg]="(p['ratios']?.['eps_yoy'] ?? 0) < 0">{{ p['ratios']?.['eps_yoy'] | percent:'1.1-1' }}</td>
+            <td class="num">{{ p['ratios']?.['ocf_margin'] | percent:'1.1-1' }}</td>
+            <td class="num">{{ p['ratios']?.['free_cash_flow'] | number:'1.0-0' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<!-- Styles -->
+<style>
+  .page-title { margin: .25rem 0 .5rem; font-size: 1.375rem; font-weight: 600; }
+  .toolbar { display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem; }
+  .auto-wrap { flex: 1; min-width: 360px; max-width: 500px; }
+  .date-wrap { flex: 0 0 440px; max-width: 560px; }
+  .date-wrap .p-inputtext { width: 100%; }
+  .date-wrap .p-inputwrapper, .date-wrap .p-datepicker { width: 100%; }
+  .toggle-wrap { flex-shrink: 0; }
+  .ratios { display: grid; gap: 1rem; padding-bottom: 6rem; }
+  .card { padding: 1rem; border: 1px solid #334155; border-radius: 8px; background: #111827; color: #e5e7eb; }
+  .card h3 { margin: 0 0 .5rem; color: #f3f4f6; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .5rem 1rem; }
+  .table-scroll { overflow: auto; }
+  table.wide { width: 100%; border-collapse: collapse; }
+  table.wide th { text-align: left; font-weight: 600; padding: .25rem 0; }
+  table.wide th.num { text-align: right; }
+  td { padding: .25rem 0; color: inherit; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .empty { color: #94a3b8; font-style: italic; }
+  .pos { color: #22c55e; }
+  .neg { color: #ef4444; }
+</style>

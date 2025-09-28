@@ -1,0 +1,123 @@
+<div>
+  <h2 class="text-xl font-bold mb-4 mt-4">Yearly History</h2>
+
+  @if (!ticker) {
+    <div class="controls mb-4 mt-4">
+      <div class="w-full md:w-auto md:min-w-[240px]">
+        <!--
+        <p-iconfield iconPosition="left">
+          <p-inputicon>
+            <i class="pi pi-search"></i>
+          </p-inputicon>
+          <input
+            id="ticker"
+            pInputText
+            type="text"
+            [(ngModel)]="value"
+            placeholder="Ticker"
+            aria-label="Ticker"
+          />
+          <p-inputicon class="pi pi-times cursor-pointer" (click)="clearTicker()"></p-inputicon>
+        </p-iconfield>-->
+
+        <!-- Use autocomplete -->
+        <app-ticker-autocomplete
+          [placeholder]="'Find ticker…'"
+          [minLength]="1"
+          [limit]="20"
+          [disabled]="loadingTickers"
+          (picked)="onTickerPicked($event)"
+          (queryChange)="onQueryChanged($event)"
+          (enter)="handleClick()"
+          (cleared)="clearTicker()">
+        </app-ticker-autocomplete>
+      </div>
+
+      <button
+        pButton
+        type="button"
+        class="w-full md:w-auto"
+        [label]="loading() ? 'Loading…' : 'Fetch Yearly'"
+        (click)="handleClick()"
+        [disabled]="loading()">
+      </button>
+    </div>
+  }
+
+  @let r = result();
+
+  @if (r) {
+    <div class="w-full">
+      <!-- Header with info + view toggle -->
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center flex-wrap gap-x-6 gap-y-2">
+          <div class="flex items-center">
+            <span class="font-medium">Ticker:</span>
+            <span class="ml-2">{{ r.ticker }}</span>
+          </div>
+          <div class="flex items-center">
+            <span class="font-medium">Company:</span>
+            <span class="ml-2">{{ r.company_name }}</span>
+          </div>
+        </div>
+
+        <!-- Toggle between Table and Chart -->
+        <p-togglebutton
+          [ngModel]="viewMode() === 'chart'"
+          (ngModelChange)="toggleView($event)"
+          onLabel="Chart"
+          offLabel="Table"
+          onIcon="pi pi-chart-bar"
+          offIcon="pi pi-table"
+          class="w-32"
+          ariaLabel="Toggle yearly view" />
+      </div>
+
+      <!-- Views -->
+      @if (viewMode() === 'chart') {
+        <div class="w-full">
+          <p-chart type="bar" [data]="chartData()" [options]="chartOptions()" class="h-[30rem] w-full" />
+        </div>
+      } @else {
+        <div class="overflow-x-auto w-full">
+          <p-table
+            [value]="r?.history ?? []"
+            [paginator]="false"
+            [tableStyle]="{ 'min-width': '70rem' }"
+            tableStyleClass="dividends-table w-full"
+            [loading]="loading()">
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width: 10%">Year</th>
+                <th style="width: 15%">Payments</th>
+                <th style="width: 20%">Year Dividend Sum</th>
+                <th style="width: 15%">Yield %</th>
+                <th style="width: 20%">Price Basis</th>
+                <th style="width: 20%">Price Basis Date</th>
+                <th style="width: 10%">YTD</th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-y>
+              <tr>
+                <td data-label="Year">{{ y.year }}</td>
+                <td data-label="Payments">{{ y.payments_count }}</td>
+                <td data-label="Year Dividend Sum">{{ y.year_div_sum }}</td>
+                <td data-label="Yield %">{{ y.year_yield }}</td>
+                <td data-label="Price Basis">{{ y.price_basis }}</td>
+                <td data-label="Price Basis Date">{{ y.price_basis_date }}</td>
+                <td data-label="YTD">{{ y.is_ytd ? 'Yes' : 'No' }}</td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="7">No yearly history found.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      }
+    </div>
+  }
+</div>

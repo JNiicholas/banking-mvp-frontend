@@ -1,0 +1,19 @@
+<header class="app-header">
+  <div class="brand">
+    <button type="button" class="name text-primary brand-link" (click)="goHome()" aria-label="Go to home">
+      <i class="pi pi-globe mr-2"></i> Banking App
+    </button>
+  </div>
+
+  <!-- MegaMenu -->
+  <p-megaMenu
+    [model]="items"
+    orientation="horizontal"
+    class="main-megamenu topbar-mega"
+  ></p-megaMenu>
+
+  <!-- Right side actions -->
+  <div class="header-actions">
+    <app-login-button />
+  </div>
+</header>

@@ -1,0 +1,35 @@
+<div class="mx-8">
+  <h2 class="mt-4">Financial History</h2>
+
+  <!-- Controls: Autocomplete + Periodicity toggle in one row -->
+  <div class="mb-4 mt-3 flex align-items-center gap-3">
+    <div style="max-width: 400px; width: 100%;">
+      <app-ticker-autocomplete
+        [placeholder]="'Search ticker…'"
+        (picked)="onPick($event)"
+        (cleared)="onClear()">
+      </app-ticker-autocomplete>
+    </div>
+    <div>
+      <p-togglebutton
+        [(ngModel)]="checked"
+        (onChange)="onPeriodicityChanged()"
+        onLabel="Annual"
+        offLabel="Quarterly"
+        onIcon="pi pi-calendar-plus"
+        offIcon="pi pi-calendar"
+        class="w-36"
+        ariaLabel="Toggle periodicity">
+      </p-togglebutton>
+    </div>
+  </div>
+
+  <div class="grid">
+    @for (entry of (allCharts | keyvalue); track entry.key) {
+      <div class="col-12 md:col-6">
+        <h3>{{ entry.value?.datasets?.[0]?.label || entry.key }}</h3>
+        <p-chart type="line" [data]="entry.value" [options]="chartOptions" style="height: 300px"></p-chart>
+      </div>
+    }
+  </div>
+</div>

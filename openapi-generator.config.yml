@@ -1,0 +1,27 @@
+generatorName: typescript-angular
+inputSpec: http://localhost:8080/v3/api-docs   # or a local file ./openapi.json
+#inputSpec: ./openapi.json
+# We pass the output directory from the npm script (-o ./src/app/api).
+# If you prefer to keep it in this file instead, uncomment the next line:
+# output: ./src/app/api
+
+additionalProperties:
+  # Align the SDK with your Angular version
+  ngVersion: "20.0.0"
+
+  # Package metadata (only used if you later publish a package)
+  npmName: banking-frontend-api
+
+  # Angular/Typescript generator behavior
+  supportsES6: true
+  useHttpClient: true
+  withSeparateModelsAndApi: true   # generates /apis and /models folders
+  fileNaming: kebab-case
+  modelPropertyNaming: original
+  enumPropertyNaming: original
+  serviceSuffix: ApiService         # e.g. DividendsApiService
+  providedInRoot: true              # tree‑shakeable singletons
+  stringEnums: true
+  useSingleRequestParameter: true   # { request: { ...params } } signature
+  queryParamObjectFormat: json      # IMPORTANT: avoid 'form' which breaks TS Angular
+  useRxJS6: true

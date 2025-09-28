@@ -1,0 +1,72 @@
+{
+  "name": "banking-frontend",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "serve:ssr:banking-frontend": "node dist/banking-frontend/server/server.mjs",
+    "openapi:pull": "curl -fsSL http://localhost:8080/v3/api-docs -o openapi.json",
+    "openapi:gen": "openapi-generator-cli generate -c openapi-generator.config.yml -o ./src/app/api --ignore-file-override src/app/api/.openapi-generator-ignore",
+    "openapi:regen": "npm run openapi:pull && npm run openapi:gen"
+  },
+  "prettier": {
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^20.1.6",
+    "@angular/common": "^20.1.0",
+    "@angular/compiler": "^20.1.0",
+    "@angular/core": "^20.1.0",
+    "@angular/forms": "^20.1.0",
+    "@angular/platform-browser": "^20.1.0",
+    "@angular/platform-server": "^20.1.0",
+    "@angular/router": "^20.1.0",
+    "@angular/ssr": "^20.1.5",
+    "@fortawesome/fontawesome-free": "^7.0.1",
+    "@primeng/themes": "^20.0.1",
+    "@primeuix/themes": "^1.2.3",
+    "chart.js": "^4.5.0",
+    "express": "^5.1.0",
+    "keycloak-angular": "^20.0.0",
+    "keycloak-js": "^26.2.0",
+    "lightweight-charts": "^5.0.8",
+    "mapbox-gl": "^3.14.0",
+    "primeflex": "^4.0.0",
+    "primeicons": "^7.0.0",
+    "primeng": "^20.0.1",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "^0.15.1"
+  },
+  "devDependencies": {
+    "@angular/build": "^20.1.5",
+    "@angular/cli": "^20.1.5",
+    "@angular/compiler-cli": "^20.1.0",
+    "@openapitools/openapi-generator-cli": "^2.23.1",
+    "@types/express": "^5.0.1",
+    "@types/jasmine": "~5.1.0",
+    "@types/node": "^20.17.19",
+    "autoprefixer": "^10.4.21",
+    "jasmine-core": "~5.8.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.13",
+    "tailwindcss-primeui": "^0.6.1",
+    "typescript": "~5.8.2"
+  }
+}

@@ -1,0 +1,303 @@
+<div>
+    <h2 class="mb-2">Advanced Screener</h2>
+
+<!-- Controls -->
+<div class="controls mb-4 mt-4">
+  <!-- Frequency Select -->
+  <div class="control">
+    <label class="block mb-2 font-medium" for="freqSelect">Frequency</label>
+    <p-select
+      [options]="frequencyOptions"
+      [(ngModel)]="freq"
+      optionLabel="label"
+      optionValue="value"
+      [checkmark]="true"
+      [showClear]="true"
+      placeholder="Any frequency"
+      class="w-full md:w-56"
+      (onChange)="setFrequency($event.value)"
+    ></p-select>
+  </div>
+
+  <!-- Min Yield -->
+  <div class="control">
+    <label class="block mb-2 font-medium" for="minYieldInput">Min Yield (%)</label>
+    <input id="minYieldInput" type="text" pInputText [(ngModel)]="minYield" class="mb-2" />
+    <p-slider [(ngModel)]="minYield" [min]="0" [max]="20" [step]="0.1"></p-slider>
+  </div>
+
+  <!-- Max Yield -->
+  <div class="control">
+    <label class="block mb-2 font-medium" for="maxYieldInput">Max Yield (%)</label>
+    <input id="maxYieldInput" type="text" pInputText [(ngModel)]="maxYield" class="mb-2" />
+    <p-slider [(ngModel)]="maxYield" [min]="0" [max]="20" [step]="0.1"></p-slider>
+  </div>
+
+  <!-- Actions (moved inline to the right of Max Yield) -->
+  <div class="control control-actions">
+    <button
+      pButton
+      type="button"
+      [label]="loading() ? 'Screening…' : 'Screen'"
+      (click)="handleClick()"
+      [disabled]="loading()"
+    ></button>
+    <button pButton type="button" class="p-button-text" label="Clear" (click)="clearScreener(); sectorSel.handleClear()"></button>
+  </div>
+</div>
+
+<!-- Advanced Filters Accordion -->
+<p-accordion class="mb-4" [value]="[]">
+  <p-accordion-panel value="advanced">
+    <p-accordion-header>
+      <ng-template #toggleicon let-active="active">
+        @if (active) {
+          <i class="pi pi-minus"></i>
+        } @else {
+          <i class="pi pi-plus"></i>
+        }
+      </ng-template>
+      <span class="flex items-center gap-2 w-full">
+        <i class="pi pi-sliders-h"></i>
+        <span class="font-bold whitespace-nowrap">Advanced Filters</span>
+      </span>
+    </p-accordion-header>
+    <p-accordion-content>
+      <!-- Row 1: Sector, Min Market Cap, Max Market Cap -->
+      <div class="controls mt-4 grid grid-cols-1 md:grid-cols-12 gap-6">
+        <!-- Sector Selector -->
+        <div class="control md:col-span-4">
+          <label class="block mb-2 font-medium" for="sectorSelector">Sector</label>
+          <app-sector-selector
+            #sectorSel
+            [placeholder]="'Pick a sector'"
+            (picked)="onSectorPicked($event)"
+            (cleared)="onSectorCleared()">
+          </app-sector-selector>
+        </div>
+
+        <!-- Min Market Cap (USD) -->
+        <div class="control md:col-span-4">
+          <label class="block mb-2 font-medium" for="minMcapInput">Min Market Cap (USD)</label>
+          <p-inputnumber
+            inputId="minMcapInput"
+            [(ngModel)]="minMcap"
+            [showButtons]="true"
+            mode="currency"
+            currency="USD"
+            [min]="0"
+            [max]="2000000000000"
+            [step]="1000000"
+            class="mb-2 w-full"
+            (ngModelChange)="syncMinMcapFromInput($event)">
+          </p-inputnumber>
+          <p-slider
+            [(ngModel)]="minMcapPos"
+            [min]="0"
+            [max]="100"
+            [step]="1"
+            (ngModelChange)="syncMinMcapFromSlider($event)">
+          </p-slider>
+          <small class="opacity-70">≈ {{ (minMcap || 0) / 1_000_000_000 | number:'1.0-2' }} B USD</small>
+        </div>
+
+        <!-- Max Market Cap (USD) -->
+        <div class="control md:col-span-4">
+          <label class="block mb-2 font-medium" for="maxMcapInput">Max Market Cap (USD)</label>
+          <p-inputnumber
+            inputId="maxMcapInput"
+            [(ngModel)]="maxMcap"
+            [showButtons]="true"
+            mode="currency"
+            currency="USD"
+            [min]="0"
+            [max]="2000000000000"
+            [step]="1000000"
+            class="mb-2 w-full"
+            (ngModelChange)="syncMaxMcapFromInput($event)">
+          </p-inputnumber>
+          <p-slider
+            [(ngModel)]="maxMcapPos"
+            [min]="0"
+            [max]="100"
+            [step]="1"
+            (ngModelChange)="syncMaxMcapFromSlider($event)">
+          </p-slider>
+          <small class="opacity-70">≈ {{ (maxMcap || 0) / 1_000_000_000 | number:'1.0-2' }} B USD</small>
+        </div>
+      </div>
+
+      <!-- Row 2: Min P/E, Max P/E, Min P/B, Max P/B -->
+      <div class="controls mt-6 grid grid-cols-1 md:grid-cols-12 gap-6">
+        <!-- Min P/E -->
+        <div class="control md:col-span-4">
+          <label class="block mb-2 font-medium" for="minPeInput">Min P/E</label>
+          <input id="minPeInput" type="text" pInputText [(ngModel)]="minPe" class="mb-2" />
+          <p-slider [(ngModel)]="minPe" [min]="0" [max]="200" [step]="0.1"></p-slider>
+        </div>
+
+        <!-- Max P/E -->
+        <div class="control md:col-span-4">
+          <label class="block mb-2 font-medium" for="maxPeInput">Max P/E</label>
+          <input id="maxPeInput" type="text" pInputText [(ngModel)]="maxPe" class="mb-2" />
+          <p-slider [(ngModel)]="maxPe" [min]="0" [max]="200" [step]="0.1"></p-slider>
+        </div>
+
+        <!-- Min P/B -->
+        <div class="control md:col-span-2">
+          <label class="block mb-2 font-medium" for="minPbInput">Min P/B</label>
+          <input id="minPbInput" type="text" pInputText [(ngModel)]="minPb" class="mb-2" />
+          <p-slider [(ngModel)]="minPb" [min]="0" [max]="50" [step]="0.1"></p-slider>
+        </div>
+
+        <!-- Max P/B -->
+        <div class="control md:col-span-2">
+          <label class="block mb-2 font-medium" for="maxPbInput">Max P/B</label>
+          <input id="maxPbInput" type="text" pInputText [(ngModel)]="maxPb" class="mb-2" />
+          <p-slider [(ngModel)]="maxPb" [min]="0" [max]="50" [step]="0.1"></p-slider>
+        </div>
+      </div>
+
+      <!-- Row 3: Min P/S, Max P/S, Max Payout Ratio -->
+      <div class="controls mt-6 grid grid-cols-1 md:grid-cols-12 gap-6">
+        <!-- Min P/S -->
+        <div class="control md:col-span-4">
+          <label class="block mb-2 font-medium" for="minPsInput">Min P/S</label>
+          <input id="minPsInput" type="text" pInputText [(ngModel)]="minPs" class="mb-2" />
+          <p-slider [(ngModel)]="minPs" [min]="0" [max]="50" [step]="0.1"></p-slider>
+        </div>
+
+        <!-- Max P/S -->
+        <div class="control md:col-span-4">
+          <label class="block mb-2 font-medium" for="maxPsInput">Max P/S</label>
+          <input id="maxPsInput" type="text" pInputText [(ngModel)]="maxPs" class="mb-2" />
+          <p-slider [(ngModel)]="maxPs" [min]="0" [max]="50" [step]="0.1"></p-slider>
+        </div>
+
+        <!-- Max Payout Ratio (EPS-based) -->
+        <div class="control md:col-span-4">
+          <label class="block mb-2 font-medium" for="maxPayoutInput">Max Payout Ratio (EPS)</label>
+          <input id="maxPayoutInput" type="text" pInputText [(ngModel)]="maxPayoutRatio" class="mb-2" />
+          <p-slider [(ngModel)]="maxPayoutRatio" [min]="0" [max]="2" [step]="0.01"></p-slider>
+        </div>
+      </div>
+    </p-accordion-content>
+  </p-accordion-panel>
+</p-accordion>
+
+    @let r = result();
+
+    @if (r) {
+    <div class="overflow-x-auto w-full">
+        <p-table [value]="r?.items ?? []" [columns]="selectedColumns" dataKey="ticker" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)" [paginator]="true" [rows]="pageSize" [first]="(page - 1) * pageSize"
+            [totalRecords]="totalRecords()" [lazy]="true" (onPage)="onPage($event)"
+            [rowsPerPageOptions]="[10, 25, 50, 100]"  [breakpoint]="'768px'" tableStyleClass="dividends-table w-full" [loading]="loading()">
+            <ng-template pTemplate="caption">
+                <div class="flex items-center w-full">
+                    <p-multiselect
+                      display="chip"
+                      [options]="cols"
+                      [(ngModel)]="selectedColumns"
+                      optionLabel="header"
+                      selectedItemsLabel="{0} columns selected"
+                      [style]="{ 'min-width': '220px' }"
+                      placeholder="Choose Columns"
+                      class="mr-4"
+                    ></p-multiselect>
+                    <span class="font-medium">Frequency:</span>
+                    <span class="ml-2">{{ freqLabel }}</span>
+                    <span class="ml-4">
+                        (Yield between {{ (minYield ?? '—') }}% and {{ (maxYield ?? '—') }}%)
+                    </span>
+                    @if (selectedSector) {
+                      <span class="ml-4">Sector: {{ selectedSector }}</span>
+                    }
+                    <span class="ml-auto">Total: {{ r.total }}</span>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    @if (hasDescriptionColumn()) {
+                        <th style="width: 3rem;"></th>
+                      }
+                    @for (col of columns; track col.field) {
+                        <th [style.width]="col.width || 'auto'">{{ col.header }}</th>
+                      }
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-row let-columns="columns" let-expanded="expanded">
+                <tr>
+                    @if (hasDescriptionColumn()) {
+                        <td>
+                          <p-button type="button" pRipple [pRowToggler]="row" [text]="true" severity="secondary" [rounded]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></p-button>
+                        </td>
+                      }
+                    @for (col of columns; track col.field) {
+                        <td>
+                          <span class="p-column-title md:hidden">{{ col.header }}</span>
+                          <span>
+                            @if (col.field === 'ticker') {
+                              <a [routerLink]="['/ticker-info', row.ticker]" target="_blank" rel="noopener noreferrer" class="underline font-mono">
+                                {{ row.ticker }}
+                              </a>
+                            } @else if (col.field === 'homepage_url') {
+                              @if (row.homepage_url) {
+                                <a [href]="row.homepage_url" target="_blank" rel="noopener noreferrer" class="underline">
+                                  {{ row.homepage_url }}
+                                </a>
+                              } @else {
+                                <span>—</span>
+                              }
+                            } @else if (col.field === 'description') {
+                              @if (row.description) {
+                                {{ row.description | slice:0:20 }}@if ((row.description?.length || 0) > 20) { … }
+                              } @else {
+                                <span>—</span>
+                              }
+                            } @else {
+                              @switch (col.pipe) {
+                                @case ('number') {
+                                  <span>{{ row[col.field] | number:'1.2-2' }}</span>
+                                }
+                                @case ('percent') {
+                                  <span>{{ row[col.field] | percent:'1.2-2' }}</span>
+                                }
+                                @default {
+                                  @if (col.field === 'as_of' || col.field === 'updated_at' || col.field === 'last_ex_date') {
+                                    <span>{{ row[col.field] | date:'yyyy-MM-dd' }}</span>
+                                  } @else {
+                                    <span>{{ row[col.field] }}</span>
+                                  }
+                                }
+                              }
+                            }
+                          </span>
+                        </td>
+                      }
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="expandedrow" let-row let-columns="columns">
+              <tr>
+                <td [attr.colspan]="(columns?.length || selectedColumns.length || 1) + (hasDescriptionColumn() ? 1 : 0)">
+                  <div class="p-4">
+                    <div class="font-semibold mb-2">Description</div>
+                    <div class="leading-relaxed whitespace-pre-line">
+                      {{ row.description || '—' }}
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="(columns?.length || selectedColumns.length || 1) + (hasDescriptionColumn() ? 1 : 0)">No results found.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    }
+</div>

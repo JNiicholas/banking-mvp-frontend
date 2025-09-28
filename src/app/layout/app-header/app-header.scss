@@ -1,0 +1,180 @@
+.app-header {
+  display: flex;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  inset-inline: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  align-items: center;
+  gap: 1rem;
+  padding: .5rem 1rem;
+  background: #000;                 /* solid black header (non-transparent) */
+  color: #fff;                      /* readable text on black */
+  -webkit-backdrop-filter: none;    /* avoid any accidental translucency */
+  backdrop-filter: none;
+  border-bottom: none;
+  /* border-bottom removed, replaced by box-shadow for sticky effect */
+  justify-content: space-between;
+
+  .brand {
+    display: flex;
+    align-items: center;
+    margin-right: .5rem;
+
+    .name {
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+  }
+
+  .main-megamenu {
+   flex: 0 1 auto;
+    min-width: 0;    /* prevent overflow in flex context */
+    margin: 0 auto;
+  }
+
+  .header-actions {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+}
+
+
+
+/* Optional: better spacing for dark header */
+:host ::ng-deep .p-megamenu {
+  background: transparent;
+  border: none;
+}
+
+/* Ensure a blue primary exists (your chosen blue) */
+:root {
+  --p-primary-500: #3b82f6;
+  --p-primary-color: var(--p-primary-500);
+}
+
+/* Scope to just the header MegaMenu (use host scope, not tag selector) */
+:host .topbar-mega {
+  /* Menubar/MegaMenu item tokens (applied to top level items) */
+  --p-menubar-item-color: var(--p-primary-color);
+  --p-menubar-item-icon-color: var(--p-primary-color);
+  --p-menubar-item-hover-color: var(--p-primary-color);
+  --p-menubar-item-active-color: var(--p-primary-color);
+
+  /* If preset applies concrete colors on the link, hard-set top level link color */
+}
+
+/* Force link/label/icon to inherit the blue on top-level items */
+:host ::ng-deep .topbar-mega .p-megamenu-root-list > li > .p-megamenu-item-content > a.p-megamenu-item-link {
+  color: var(--p-primary-color) !important;
+}
+:host ::ng-deep .topbar-mega .p-megamenu-root-list > li > .p-megamenu-item-content > a.p-megamenu-item-link .p-megamenu-item-icon,
+:host ::ng-deep .topbar-mega .p-megamenu-root-list > li > .p-megamenu-item-content > a.p-megamenu-item-link .p-megamenu-item-label {
+  color: inherit !important;
+}
+
+/* Ensure the MegaMenu dropdown is fully opaque and covers other components */
+:host ::ng-deep .topbar-mega .p-megamenu-overlay[data-pc-section="panel"],
+:host ::ng-deep .topbar-mega .p-megamenu-panel {
+  z-index: 2100;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+:host ::ng-deep .topbar-mega.p-megamenu {
+  overflow: visible;
+}
+
+/* --- Fix: MegaMenu burger menu too narrow on mobile --- */
+:host ::ng-deep .topbar-mega.p-megamenu-mobile-active {
+  --menu-min-width: 16rem; /* tweak as you like */
+}
+
+:host ::ng-deep .topbar-mega.p-megamenu-mobile-active .p-megamenu-root-list,
+:host ::ng-deep .topbar-mega.p-megamenu-mobile-active .p-megamenu-sub,
+:host ::ng-deep .topbar-mega.p-megamenu-mobile-active .p-megamenu-panel {
+  min-width: var(--menu-min-width) !important;
+  width: auto !important;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .topbar-mega.p-megamenu-mobile-active .p-megamenu-item-label {
+  display: inline-block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+:host ::ng-deep .topbar-mega.p-megamenu-mobile-active .p-megamenu-item-icon {
+  margin-right: .5rem;
+}
+
+
+
+/* --- Mobile header layout: menu left, brand centered, actions right --- */
+@media (max-width: 960px) {
+  .app-header {
+    display: grid; /* override flex on mobile */
+    grid-template-columns: auto 1fr auto; /* left / center / right */
+    align-items: center;
+    column-gap: .5rem;
+    grid-auto-flow: column;        /* place items by columns in a single row */
+    grid-template-rows: auto;      /* one row */
+  }
+
+  /* Place the MegaMenu (burger) in the LEFT column */
+  .app-header .topbar-mega {
+    grid-column: 1;
+    justify-self: start;
+    margin: 0 !important;          /* override .main-megamenu { margin: 0 auto } */
+    width: max-content;             /* prevent it from stretching */
+    grid-row: 1;                   /* same row as brand and actions */
+    display: inline-block;         /* avoid taking full row width */
+  }
+
+  /* Center the brand (globe + title) in the MIDDLE column */
+  .app-header .brand {
+    grid-column: 2;
+    justify-self: center;
+    grid-row: 1;                   /* same row */
+  }
+
+  /* Keep actions (e.g., Login) on the RIGHT column */
+  .app-header .header-actions {
+    grid-column: 3;
+    justify-self: end;
+    grid-row: 1;                   /* same row */
+  }
+}
+/* --- End mobile layout tweak --- */
+/* --- Narrow desktop band tweaks: prevent wrap between 961px and 1062px --- */
+@media (min-width: 961px) and (max-width: 1062px) {
+  .app-header { 
+    gap: .5rem;                    /* tighten global gaps */
+    padding: .5rem .75rem;         /* slightly smaller side padding */
+    flex-wrap: nowrap;             /* enforce single row */
+  }
+
+  .app-header .brand {
+    margin-right: .25rem;          /* reduce space before menu */
+  }
+  .app-header .brand .name {       /* slightly smaller brand text */
+    font-size: .95rem;
+  }
+
+  /* Tighten menu item padding to gain horizontal space */
+  :host ::ng-deep .topbar-mega .p-megamenu-root-list > li > .p-megamenu-item-content > a.p-megamenu-item-link {
+    padding-inline: .5rem !important; /* default is ~.75–1rem depending on preset */
+  }
+  :host ::ng-deep .topbar-mega .p-megamenu-root-list { 
+    gap: .25rem;                   /* if preset uses gaps, shrink them */
+  }
+
+  /* Make logout button a bit more compact */
+  .app-header .header-actions .p-button,
+  .app-header .header-actions button {
+    padding: .45rem .6rem;         /* reduce internal padding */
+    font-size: .95rem;             /* slightly smaller label */
+  }
+}
+/* --- End narrow desktop band tweaks --- */

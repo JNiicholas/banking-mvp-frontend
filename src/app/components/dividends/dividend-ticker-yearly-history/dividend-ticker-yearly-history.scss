@@ -1,0 +1,77 @@
+.card {
+  max-width: 640px;
+}
+
+.error {
+  color: #e53935;
+  font-weight: 600;
+}
+
+/* Responsive column handling */
+@media (max-width: 1300px) {
+  .col-declaration {
+    display: none;
+  }
+}
+
+@media (max-width: 1000px) {
+  .col-record {
+    display: none;
+  }
+}
+
+/* Stacked layout label rendering for very small screens */
+@media (max-width: 700px) {
+  /* Hide table header in stacked mode */
+  :host ::ng-deep .dividends-table .p-datatable-thead {
+    display: none !important;
+  }
+
+  /* Render each cell as a two-column grid: [label | value] */
+  :host ::ng-deep .dividends-table .p-datatable-tbody > tr > td {
+    display: grid !important;
+    grid-template-columns: 16ch 1fr; /* label width | value */
+    align-items: center;
+    gap: 0.5rem;
+    padding-block: 0.75rem; /* nicer vertical spacing */
+  }
+
+  /* Pull the label from each cell's data-label attribute */
+  :host ::ng-deep .dividends-table .p-datatable-tbody > tr > td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    opacity: 0.85;
+  }
+
+  /* Ensure columns hidden at medium widths reappear in stacked mode */
+  :host ::ng-deep .dividends-table .col-declaration,
+  :host ::ng-deep .dividends-table .col-record {
+    display: table-cell !important;
+  }
+}
+/* Controls row/stack behavior */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start; /* left align on large screens */
+  gap: 0.75rem; /* tighter spacing between controls */
+
+  /* Do not grow on large screens; keep compact */
+  > * {
+    flex: 0 0 auto;
+  }
+}
+
+/* Stack and stretch on small screens */
+@media (max-width: 700px) {
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2rem;
+  }
+
+  .controls > * {
+    width: 100%; /* each control takes full width */
+  }
+}

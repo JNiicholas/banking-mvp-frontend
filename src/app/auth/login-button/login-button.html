@@ -1,0 +1,3 @@
+<button pButton type="button" (click)="handleLogin()">
+  {{ (isLoggedIn$ | async) ? 'Logout' : 'Login' }}
+</button>
