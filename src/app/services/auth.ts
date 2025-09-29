@@ -2,6 +2,13 @@ import { Injectable, inject, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { KeycloakService, KeycloakEventType } from 'keycloak-angular';
 
+export interface AuthUser {
+  firstName: string | null;
+  lastName: string | null;
+  email: string | null;
+  roles: string[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private kc = inject(KeycloakService);
@@ -83,5 +90,25 @@ async refreshState() {
   hasRealmRole(role: string): boolean {
     const tokenParsed: any = this.kc.getKeycloakInstance()?.tokenParsed;
     return tokenParsed?.realm_access?.roles?.includes(role) ?? false;
+  }
+
+  /**
+   * Returns basic user details from the current JWT.
+   * Synchronous (no network request). Returns null if not logged in or no token.
+   */
+  getUser(): AuthUser | null {
+    const inst = this.kc.getKeycloakInstance();
+    const parsed: any = inst?.tokenParsed;
+    if (!parsed) {
+      return null;
+    }
+    const firstName = (parsed.given_name ?? parsed.givenName ?? null) as string | null;
+    const lastName = (parsed.family_name ?? parsed.familyName ?? null) as string | null;
+    const email = (parsed.email ?? null) as string | null;
+    const roles: string[] = Array.isArray(parsed?.realm_access?.roles)
+      ? parsed.realm_access.roles as string[]
+      : [];
+
+    return { firstName, lastName, email, roles };
   }
 }
