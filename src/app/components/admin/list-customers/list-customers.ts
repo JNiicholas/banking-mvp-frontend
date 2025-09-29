@@ -23,6 +23,8 @@ export class ListCustomers implements OnInit {
   error?: string;
   showCreate = false;
 
+    expandedRows: Record<string, boolean> = {};
+
   private api = inject(CustomerAPIApiService);
   private cdr = inject(ChangeDetectorRef);
 
@@ -65,4 +67,29 @@ export class ListCustomers implements OnInit {
   }
 
   trackById = (_: number, c: CustomerResponse) => c.id ?? _;
+
+  expandAll(): void {
+    this.expandedRows = {};
+    for (const c of this.customers) if (c.id) this.expandedRows[c.id] = true;
+    this.cdr.markForCheck();
+  }
+  collapseAll(): void {
+    this.expandedRows = {};
+    this.cdr.markForCheck();
+  }
+  onRowExpand(e: any) {
+    const id: string | undefined = e?.data?.id;
+    if (id) {
+      this.expandedRows[id] = true;
+      this.cdr.markForCheck();
+    }
+  }
+  onRowCollapse(e: any) {
+    const id: string | undefined = e?.data?.id;
+    if (id && this.expandedRows[id]) {
+      delete this.expandedRows[id];
+      this.cdr.markForCheck();
+    }
+  }
+
 }

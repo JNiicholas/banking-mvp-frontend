@@ -1,102 +1,98 @@
 <h2 class="mt-4 mb-3">Customers</h2>
 
 @if (loading) {
-  <div>Loading customers…</div>
+<div>Loading customers…</div>
 } @else if (error) {
-  <div class="text-red-500">{{ error }}</div>
+<div class="text-red-500">{{ error }}</div>
 } @else {
-  @if (customers?.length) {
-    <div class="card">
-      <p-table [value]="customers" dataKey="id" [tableStyle]="{ 'min-width': '48rem' }" [rowHover]="true">
-        <ng-template pTemplate="caption">
-          <div class="flex items-center justify-between">
-            <span class="text-xl font-bold">Customers</span>
-            <p-button
-              icon="pi pi-user-plus"
-              label="Add customer"
-              (onClick)="openCreate()"
-              raised
-            />
-          </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-          <tr>
-            <th style="width: 3rem"></th>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Email</th>
-          </tr>
-        </ng-template>
+@if (customers?.length) {
+<div class="card">
+  <p-table [value]="customers" dataKey="id" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)"
+    (onRowCollapse)="onRowCollapse($event)" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="caption">
+      <div class="flex items-center justify-between">
+        <span class="text-xl font-bold">Customers</span>
+        <div class="flex gap-2">
+          <p-button label="Add Customer" icon="pi pi-user-plus" (onClick)="openCreate()" />
+          <!-- optional:
+        <p-button label="Expand All" icon="pi pi-plus" text (onClick)="expandAll()" />
+        <p-button label="Collapse All" icon="pi pi-minus" text (onClick)="collapseAll()" />
+        -->
+        </div>
+      </div>
+    </ng-template>
 
-        <ng-template pTemplate="body" let-customer let-expanded="expanded">
-          <tr>
-            <td>
-              <p-button
-                type="button"
-                [pRowToggler]="customer"
-                [text]="true"
-                severity="secondary"
-                [rounded]="true"
-                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-              ></p-button>
-            </td>
-            <td>{{ customer.firstName }}</td>
-            <td>{{ customer.lastName }}</td>
-            <td>{{ customer.email }}</td>
-          </tr>
-        </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 4rem"></th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Email</th>
+      </tr>
+    </ng-template>
 
-        <ng-template pTemplate="rowexpansion" let-customer>
-          <tr>
-            <td colspan="4">
-              <div class="p-4">
-                <h5 class="mb-3">Accounts for {{ customer.firstName }} {{ customer.lastName }}</h5>
-                <p-table [value]="customer.accounts || []" dataKey="id" [tableStyle]="{ 'min-width': '32rem' }">
-                  <ng-template pTemplate="header">
-                    <tr>
-                      <th style="width: 18rem">IBAN</th>
-                      <th class="text-right" style="width: 12rem">Balance</th>
-                    </tr>
-                  </ng-template>
-                  <ng-template pTemplate="body" let-acc>
-                    <tr>
-                      <td>
-                        <span class="font-mono">{{ acc.ibanDisplay || acc.ibanNormalized }}</span>
-                      </td>
-                      <td class="text-right">{{ acc.balance | currency:'EUR':'symbol-narrow':'1.2-2' }}</td>
-                    </tr>
-                  </ng-template>
-                  <ng-template pTemplate="emptymessage">
-                    <tr>
-                      <td colspan="2">This customer has no accounts.</td>
-                    </tr>
-                  </ng-template>
-                </p-table>
-              </div>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </div>
+    <ng-template pTemplate="body" let-customer let-expanded="expanded">
+      <tr>
+        <td>
+          <button pButton pRipple type="button" [pRowToggler]="customer" [text]="true" severity="secondary"
+            [rounded]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+        </td>
+        <td>{{ customer.firstName }}</td>
+        <td>{{ customer.lastName }}</td>
+        <td>{{ customer.email }}</td>
+      </tr>
+    </ng-template>
+
+    <!-- ✅ use "rowexpansion" (works reliably in recent PrimeNG) -->
+    <ng-template pTemplate="expandedrow" let-customer>
+      <tr>
+        <td colspan="4">
+          <div class="p-4">
+            <h5 class="mb-3">Accounts</h5>
+
+            @if ((customer.accounts?.length || 0) > 0) {
+            <p-table [value]="customer.accounts" [tableStyle]="{ 'min-width': '40rem' }">
+              <ng-template pTemplate="header">
+      <tr>
+        <th>IBAN</th>
+        <th class="text-right">Balance</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-acc>
+      <tr>
+        <td class="font-mono">{{ acc.ibanDisplay || acc.ibanNormalized }}</td>
+        <td class="text-right">€ {{ acc.balance | number:'1.2-2' }}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="2">No accounts.</td>
+      </tr>
+    </ng-template>
+  </p-table>
   } @else {
-    <p>No customers found.</p>
+  <div class="opacity-70">No accounts for this customer.</div>
   }
+</div>
+</td>
+</tr>
+</ng-template>
+
+<ng-template pTemplate="emptymessage">
+  <tr>
+    <td colspan="4">No customers found.</td>
+  </tr>
+</ng-template>
+</p-table>
+</div>
+} @else {
+<p>No customers found.</p>
+}
 }
 
 <!-- Create Customer Dialog -->
-<p-dialog
-  [(visible)]="showCreate"
-  [modal]="true"
-  [dismissableMask]="true"
-  [closable]="true"
-  [draggable]="false"
-  [style]="{ width: '32rem' }"
-  [breakpoints]="{ '960px': '50vw', '640px': '90vw' }"
-  (onHide)="onCreateCancelled()"
->
-<app-new-customer
-  (created)="onCustomerCreated()"
-  (cancelled)="onCreateCancelled()"
-  [showCancelButton]="true"
-></app-new-customer>
+<p-dialog [(visible)]="showCreate" [modal]="true" [dismissableMask]="true" [closable]="true" [draggable]="false"
+  [style]="{ width: '32rem' }" [breakpoints]="{ '960px': '50vw', '640px': '90vw' }" (onHide)="onCreateCancelled()">
+  <app-new-customer (created)="onCustomerCreated()" (cancelled)="onCreateCancelled()"
+    [showCancelButton]="true"></app-new-customer>
 </p-dialog>
