@@ -25,6 +25,7 @@ import { AccountTransactions } from './components/account-transactions/account-t
 
 import { ListAccounts } from './components/admin/list-customers/list-customers';
 import { NewAccount } from './components/admin/new-account/new-account';
+import { NewCustomer } from './components/admin/new-customer/new-customer';
 
 
 
@@ -55,6 +56,7 @@ export const routes: Routes = [
   { path: 'customer/my-accounts', component: AccountOverview, canActivate: [authGuard] },
   { path: 'admin/list-accounts', component: ListAccounts, canActivate: [authGuard] },
   { path: 'admin/accounts/new', component: NewAccount, canActivate: [authGuard] },
+  { path: 'admin/customers/new', component: NewCustomer, canActivate: [authGuard] },
   { path: 'accounts/:id/transactions', component: AccountTransactions, canActivate: [authGuard] },
   { path: '**', redirectTo: '' }
 ];

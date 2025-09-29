@@ -81,7 +81,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
               items: [
                 { label: 'List Customers', icon: 'pi pi-users', command: () => this.router.navigate(['/admin/list-accounts'], { skipLocationChange: true, replaceUrl: true }) },
                 { label: 'Create Customer', icon: 'pi pi-user-plus', command: () => this.router.navigate(['/admin/customers/new'], { skipLocationChange: true, replaceUrl: true }) },
-                { label: 'Create New Account', icon: 'pi pi-wallet', command: () => this.router.navigate(['/admin/accounts/new'], { skipLocationChange: true, replaceUrl: true }) }
+                { label: 'Create Account', icon: 'pi pi-wallet', command: () => this.router.navigate(['/admin/accounts/new'], { skipLocationChange: true, replaceUrl: true }) }
               ]
             }
           ]
