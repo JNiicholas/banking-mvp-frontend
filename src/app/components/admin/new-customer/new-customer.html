@@ -3,23 +3,25 @@
     [style]="{ 'background-color': '#0d1b2a', 'color': '#e0e0e0', 'border-radius': '8px', 'border': '1px solid #1e3a5f', 'padding': '1rem' }"
     styleClass="mb-3 mt-4">
     <ng-template pTemplate="header">
-        <h2 class="mb-3">Create New Customer</h2>
+        <h2 class="mb-3 flex items-center gap-2">
+          <i class="pi pi-user"></i>
+          New Customer
+        </h2>
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <i class="pi pi-user"></i>
-                <span class="font-semibold text-lg">Customer created</span>
+                <span class="font-semibold text-lg">Customer successfully created</span>
             </div>
         </div>
     </ng-template>
 
-    <div class="grid gap-2">
+    <div class="grid gap-2 ml-6">
         <div><span class="opacity-80">First name:</span> <strong>{{ created.firstName }}</strong></div>
         <div><span class="opacity-80">Last name:</span> <strong>{{ created.lastName }}</strong></div>
         <div><span class="opacity-80">Email:</span> <strong>{{ created.email }}</strong></div>
     </div>
 
     <ng-template pTemplate="footer">
-        <div class="flex gap-2">
+        <div class="flex gap-2 ml-6">
             <button pButton type="button" label="Create another" icon="pi pi-plus" (click)="cancel()"></button>
         </div>
     </ng-template>
@@ -30,7 +32,10 @@
     [style]="{ 'background-color': '#0d1b2a', 'color': '#e0e0e0', 'border-radius': '8px', 'border': '1px solid #1e3a5f', 'padding': '1rem' }"
     styleClass="mb-3 mt-4">
     <ng-template pTemplate="header">
-        <h2 class="mb-3">New Customer</h2>
+        <h2 class="mb-3 flex items-center gap-2">
+          <i class="pi pi-user"></i>
+          New Customer
+        </h2>
     </ng-template>
     <form [formGroup]="form" (ngSubmit)="create()" class="grid gap-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-xl">
@@ -67,9 +72,9 @@
         </div>
 
         <div class="flex gap-2">
-            <button pButton type="button" class="p-button-outlined" label="Cancel" icon="pi pi-times"
-                (click)="cancel()"></button>
-            <button pButton type="submit" label="Create" icon="pi pi-check"
+            <!--<button pButton type="button" class="p-button-outlined" label="Cancel" icon="pi pi-times" (click)="cancel()"></button>-->
+           
+                <button pButton type="submit" label="Create" icon="pi pi-check"
                 [disabled]="form.invalid || loading"></button>
             <span *ngIf="loading">Creating…</span>
         </div>
