@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CardModule } from 'primeng/card';
@@ -25,7 +25,11 @@ export class NewCustomer {
 
   loading = false;
   error?: string;
-  created?: CustomerResponse;
+
+  @Output('created') createdOut = new EventEmitter<CustomerResponse>();
+  @Output('cancelled') cancelledOut = new EventEmitter<void>();
+
+  createdCustomer?: CustomerResponse;
 
   form = this.fb.group({
     firstName: ['', [Validators.required, Validators.maxLength(50)]],
@@ -39,7 +43,7 @@ export class NewCustomer {
 
   create(): void {
     this.error = undefined;
-    this.created = undefined;
+    this.createdCustomer = undefined;
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -53,7 +57,8 @@ export class NewCustomer {
     this.loading = true;
     this.api.create({ createCustomerRequest: payload }).subscribe({
       next: (res: CustomerResponse) => {
-        this.created = res;
+        this.createdCustomer = res;
+        this.createdOut.emit(res);
         this.loading = false;
         this.cdr.markForCheck();
       },
@@ -69,7 +74,8 @@ export class NewCustomer {
   cancel(): void {
     this.form.reset();
     this.error = undefined;
-    this.created = undefined;
+    this.createdCustomer = undefined;
+    this.cancelledOut.emit();
     this.cdr.markForCheck();
   }
 }

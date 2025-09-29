@@ -48,7 +48,8 @@
   [dismissableMask]="true"
   [closable]="true"
   [draggable]="false"
-  styleClass="w-full md:w-9/12 lg:w-6/12"
+  [style]="{ width: '32rem' }"
+  [breakpoints]="{ '960px': '50vw', '640px': '90vw' }"
   (onHide)="onCreateCancelled()"
 >
   <app-new-customer

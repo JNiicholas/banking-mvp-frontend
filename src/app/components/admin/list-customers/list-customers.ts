@@ -55,8 +55,9 @@ export class ListCustomers implements OnInit {
     this.showCreate = false;
   }
 
-  onCustomerCreated(): void {
+  onCustomerCreated(c?: CustomerResponse): void {
     // Close dialog and refresh table
+    console.log('Customer created, refreshing list', c);
     this.showCreate = false;
     this.reload();
   }
