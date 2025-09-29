@@ -6,6 +6,7 @@ import { PopoverModule } from 'primeng/popover';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { RouterModule } from '@angular/router';
+import { Location } from '@angular/common';
 
 import { AccountAPIApiService } from '../../api/api/account-api.service';
 import { TransactionResponse } from '../../api';
@@ -28,6 +29,8 @@ export class AccountTransactions implements OnInit, OnDestroy {
   loading = false;
   error?: string;
   transactions: TransactionResponse[] = [];
+ 
+  constructor(private location: Location) {}
 
   ngOnInit(): void {
     this.route.paramMap
@@ -67,6 +70,10 @@ export class AccountTransactions implements OnInit, OnDestroy {
           this.cdr.markForCheck();
         }
       });
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
   ngOnDestroy(): void {
