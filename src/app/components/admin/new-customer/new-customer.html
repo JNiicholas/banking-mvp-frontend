@@ -72,11 +72,14 @@
         </div>
 
         <div class="flex gap-2">
-            <button pButton type="button" class="p-button-outlined" label="Cancel" icon="pi pi-times" (click)="cancel()"></button>
-           
-                <button pButton type="submit" label="Create" icon="pi pi-check"
-                [disabled]="form.invalid || loading"></button>
-            <span *ngIf="loading">Creating…</span>
+            @if (showCancelButton) {
+              <button pButton type="button" class="p-button-outlined" label="Cancel" icon="pi pi-times" (click)="cancel()"></button>
+            }
+            <button pButton type="submit" label="Create" icon="pi pi-check"
+                    [disabled]="form.invalid || loading"></button>
+            @if (loading) {
+              <span>Creating…</span>
+            }
         </div>
     </form>
 </p-card>

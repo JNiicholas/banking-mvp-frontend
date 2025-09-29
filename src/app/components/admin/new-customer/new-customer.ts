@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, EventEmitter, Output } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, EventEmitter, Output, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CardModule } from 'primeng/card';
@@ -22,6 +22,8 @@ export class NewCustomer {
   private fb = inject(FormBuilder);
   private api = inject(CustomerAPIApiService);
   private cdr = inject(ChangeDetectorRef);
+
+  @Input() showCancelButton = false;
 
   loading = false;
   error?: string;
