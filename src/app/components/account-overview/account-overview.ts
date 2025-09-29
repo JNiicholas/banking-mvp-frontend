@@ -1,6 +1,8 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { PopoverModule } from 'primeng/popover';
 
 import { AccountAPIApiService } from '../../api/api/account-api.service';
 import { AccountSummaryResponse } from '../../api';
@@ -8,7 +10,7 @@ import { AccountSummaryResponse } from '../../api';
 @Component({
   selector: 'app-account-overview',
   standalone: true,
-  imports: [CommonModule, DecimalPipe, CardModule],
+  imports: [CommonModule, DecimalPipe, CardModule, ButtonModule, PopoverModule],
   templateUrl: './account-overview.html',
   styleUrl: './account-overview.scss'
 })

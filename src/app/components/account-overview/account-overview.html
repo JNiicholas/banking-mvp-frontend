@@ -1,4 +1,4 @@
-<h2 class="mb-3">My Accounts</h2>
+<h2 class="mt-4 mb-3">My Accounts</h2>
 
 @if (loading) {
   <div>Loading accounts…</div>
@@ -20,6 +20,22 @@
                 <span class="balance-value font-bold text-xl">{{ acc.balance | number:'1.2-2' }}</span>
                 <span class="ml-1">EUR</span>
               </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="footer">
+            <div class="flex items-center">
+              <button
+                pButton
+                type="button"
+                class="p-button-text p-button-sm"
+                icon="pi pi-info-circle"
+                label="Debug info"
+                (click)="op.toggle($event)"
+              ></button>
+
+              <p-popover #op>
+                <pre class="text-xs m-0">{{ acc | json }}</pre>
+              </p-popover>
             </div>
           </ng-template>
         </p-card>
