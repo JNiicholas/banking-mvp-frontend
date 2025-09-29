@@ -23,7 +23,7 @@ import { MapboxMapComponent } from './features/mapbox-map/mapbox-map';
 import { authGuard } from './guards/auth.guard';
 import { AccountTransactions } from './components/account-transactions/account-transactions';
 
-import { ListAccounts } from './components/admin/list-accounts/list-accounts';
+import { ListAccounts } from './components/admin/list-customers/list-customers';
 import { NewAccount } from './components/admin/new-account/new-account';
 
 

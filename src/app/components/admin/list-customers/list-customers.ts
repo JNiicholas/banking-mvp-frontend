@@ -6,11 +6,11 @@ import { CustomerAPIApiService } from '../../../api/api/customer-api.service';
 import { CustomerResponse } from '../../../api';
 
 @Component({
-  selector: 'app-list-accounts',
+  selector: 'app-list-customers',
   standalone: true,
   imports: [CommonModule, TableModule],
-  templateUrl: './list-accounts.html',
-  styleUrl: './list-accounts.scss'
+  templateUrl: './list-customers.html',
+  styleUrl: './list-customers.scss'
 })
 export class ListAccounts implements OnInit {
   customers: CustomerResponse[] = [];

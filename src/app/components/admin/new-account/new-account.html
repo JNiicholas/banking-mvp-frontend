@@ -40,7 +40,10 @@
 } @else {
   <!-- Account creation form -->
   <form [formGroup]="form" (ngSubmit)="create()" class="flex flex-col gap-3 max-w-xl">
-    <p-card>
+    <p-card
+      [style]="{ 'background-color': '#0d1b2a', 'color': '#e0e0e0', 'border-radius': '8px', 'border': '1px solid #1e3a5f', 'padding': '1rem' }"
+      styleClass="mb-3"
+    >
       <ng-template pTemplate="header">
         <div class="flex items-center">
           <i class="pi pi-user mr-2"></i>
