@@ -159,7 +159,7 @@ export class AppHeaderComponent implements OnInit {
         ]
       },
       {
-        label: 'Kunde Overblik',
+        label: 'Customer Overview',
         icon: 'pi pi-user',
         visible: this.auth.hasRealmRole('user'),
         styleClass: 'menu-item-blue',
