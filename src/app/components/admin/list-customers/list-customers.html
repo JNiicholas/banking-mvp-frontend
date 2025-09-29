@@ -7,7 +7,7 @@
 } @else {
   @if (customers?.length) {
     <div class="card">
-      <p-table [value]="customers" [tableStyle]="{ 'min-width': '48rem' }" [rowHover]="true">
+      <p-table [value]="customers" dataKey="id" [tableStyle]="{ 'min-width': '48rem' }" [rowHover]="true">
         <ng-template pTemplate="caption">
           <div class="flex items-center justify-between">
             <span class="text-xl font-bold">Customers</span>
@@ -21,17 +21,59 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
+            <th style="width: 3rem"></th>
             <th>First name</th>
             <th>Last name</th>
             <th>Email</th>
           </tr>
         </ng-template>
 
-        <ng-template pTemplate="body" let-customer>
+        <ng-template pTemplate="body" let-customer let-expanded="expanded">
           <tr>
+            <td>
+              <p-button
+                type="button"
+                [pRowToggler]="customer"
+                [text]="true"
+                severity="secondary"
+                [rounded]="true"
+                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+              ></p-button>
+            </td>
             <td>{{ customer.firstName }}</td>
             <td>{{ customer.lastName }}</td>
             <td>{{ customer.email }}</td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="rowexpansion" let-customer>
+          <tr>
+            <td colspan="4">
+              <div class="p-4">
+                <h5 class="mb-3">Accounts for {{ customer.firstName }} {{ customer.lastName }}</h5>
+                <p-table [value]="customer.accounts || []" dataKey="id" [tableStyle]="{ 'min-width': '32rem' }">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th style="width: 18rem">IBAN</th>
+                      <th class="text-right" style="width: 12rem">Balance</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-acc>
+                    <tr>
+                      <td>
+                        <span class="font-mono">{{ acc.ibanDisplay || acc.ibanNormalized }}</span>
+                      </td>
+                      <td class="text-right">{{ acc.balance | currency:'EUR':'symbol-narrow':'1.2-2' }}</td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="2">This customer has no accounts.</td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </td>
           </tr>
         </ng-template>
       </p-table>

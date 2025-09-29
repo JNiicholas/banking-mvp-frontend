@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { RippleModule } from 'primeng/ripple';
+import { TagModule } from 'primeng/tag';
 
 import { CustomerAPIApiService } from '../../../api/api/customer-api.service';
 import { CustomerResponse } from '../../../api';
@@ -11,7 +13,7 @@ import { NewCustomer } from '../new-customer/new-customer';
 @Component({
   selector: 'app-list-customers',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, DialogModule, NewCustomer],
+  imports: [CommonModule, TableModule, ButtonModule, DialogModule, NewCustomer, RippleModule, TagModule],
   templateUrl: './list-customers.html',
   styleUrl: './list-customers.scss'
 })
