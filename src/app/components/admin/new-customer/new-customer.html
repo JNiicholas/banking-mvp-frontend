@@ -29,26 +29,32 @@
   <p-card [style]="{ 'background-color': '#0d1b2a', 'color': '#e0e0e0', 'border-radius': '8px', 'border': '1px solid #1e3a5f', 'padding': '1rem' }" styleClass="mb-3">
     <form [formGroup]="form" (ngSubmit)="create()" class="grid gap-4">
       <div class="field">
-        <label for="firstName" class="block mb-1">First name</label>
-        <input pInputText id="firstName" type="text" formControlName="firstName" placeholder="e.g. Jane" />
+        <p-floatlabel variant="on">
+          <input pInputText id="firstName" type="text" formControlName="firstName" />
+          <label for="firstName">First name</label>
+        </p-floatlabel>
         @if (form.get('firstName')?.touched && form.get('firstName')?.invalid) {
-          <small class="p-error">First name is required</small>
+          <div><small class="p-error">First name is required</small></div>
         }
       </div>
 
       <div class="field">
-        <label for="lastName" class="block mb-1">Last name</label>
-        <input pInputText id="lastName" type="text" formControlName="lastName" placeholder="e.g. Doe" />
+        <p-floatlabel variant="on">
+          <input pInputText id="lastName" type="text" formControlName="lastName" />
+          <label for="lastName">Last name</label>
+        </p-floatlabel>
         @if (form.get('lastName')?.touched && form.get('lastName')?.invalid) {
-          <small class="p-error">Last name is required</small>
+          <div><small class="p-error">Last name is required</small></div>
         }
       </div>
 
       <div class="field">
-        <label for="email" class="block mb-1">Email</label>
-        <input pInputText id="email" type="email" formControlName="email" placeholder="jane.doe@example.com" />
+        <p-floatlabel variant="on">
+          <input pInputText id="email" type="email" formControlName="email" />
+          <label for="email">Email</label>
+        </p-floatlabel>
         @if (form.get('email')?.touched && form.get('email')?.invalid) {
-          <small class="p-error">Valid email is required</small>
+          <div><small class="p-error">Valid email is required</small></div>
         }
       </div>
 

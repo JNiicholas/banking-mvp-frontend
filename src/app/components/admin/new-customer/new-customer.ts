@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { FloatLabelModule } from 'primeng/floatlabel';
 
 import { CustomerAPIApiService } from '../../../api/api/customer-api.service';
 import { CustomerResponse, CreateCustomerRequest } from '../../../api';
@@ -12,7 +13,7 @@ import { ChangeDetectorRef } from '@angular/core';
 @Component({
   selector: 'app-new-customer',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CardModule, InputTextModule, ButtonModule],
+  imports: [CommonModule, ReactiveFormsModule, CardModule, InputTextModule, ButtonModule, FloatLabelModule],
   templateUrl: './new-customer.html',
   styleUrl: './new-customer.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
