@@ -14,16 +14,27 @@
 
   <!-- Right side actions -->
   <div class="header-actions">
-    <p-avatar
-      icon="pi pi-user"
-      class="mr-2 cursor-pointer"
-      size="large"
-      style="background-color: var(--p-button-primary-background); color: var(--p-button-primary-color);"
-      shape="circle"
-      (click)="userPopover.toggle($event)"
-      aria-label="Open user menu"
-    />
-    <app-login-button />
+    @if (userLoggedIn) {
+      <p-avatar
+        icon="pi pi-user"
+        class="mr-2 cursor-pointer"
+        size="large"
+        style="background-color: var(--p-button-primary-background); color: var(--p-button-primary-color);"
+        shape="circle"
+        (click)="userPopover.toggle($event)"
+        aria-label="Open user menu"
+      />
+    } @else {
+      <button
+        pButton
+        type="button"
+        icon="pi pi-sign-in"
+        label="Login"
+        class="p-button"
+        (click)="login()"
+        aria-label="Login"
+      ></button>
+    }
   </div>
 
   <p-popover #userPopover>
@@ -41,15 +52,29 @@
         </div>
       </div>
 
-      <div *ngIf="userRoles?.length; else noRoles">
+      @if (userRoles.length) {
         <span class="font-medium block mb-2">Roles</span>
         <div class="flex flex-wrap gap-2">
-          <span *ngFor="let role of userRoles" class="p-chip p-component">{{ role }}</span>
+          @for (role of userRoles; track role) {
+            <p-chip [label]="role"></p-chip>
+          }
         </div>
-      </div>
-      <ng-template #noRoles>
+      } @else {
         <div class="text-sm text-surface-500 dark:text-surface-400">No roles</div>
-      </ng-template>
+      }
+
+      @if (userLoggedIn) {
+        <div class="pt-2 border-t border-surface-200 dark:border-surface-700">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-sign-out"
+            label="Logout"
+            class="p-button-text w-full justify-start"
+            (click)="logout()"
+          ></button>
+        </div>
+      }
     </div>
   </p-popover>
 </header>
