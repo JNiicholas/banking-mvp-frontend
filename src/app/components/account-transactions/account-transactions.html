@@ -1,4 +1,17 @@
-<h2 class="mt-4 mb-3">Account Transactions</h2>
+
+<div class="flex items-center justify-between mt-4 mb-3">
+  <h2 class="m-0">Account Transactions</h2>
+  @if (transactions.length > 0) {
+    <button
+      pButton
+      type="button"
+      icon="pi pi-arrow-left"
+      label="Back"
+      class="p-button-text"
+      routerLink="/customer/my-accounts"
+    ></button>
+  }
+</div>
 
 @if (loading) {
   <div>Loading transactions…</div>

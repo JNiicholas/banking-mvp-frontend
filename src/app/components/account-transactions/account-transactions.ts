@@ -5,6 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { PopoverModule } from 'primeng/popover';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 import { AccountAPIApiService } from '../../api/api/account-api.service';
 import { TransactionResponse } from '../../api';
@@ -12,7 +13,7 @@ import { TransactionResponse } from '../../api';
 @Component({
   selector: 'app-account-transactions',
   standalone: true,
-  imports: [CommonModule, DatePipe, DecimalPipe, CardModule, ButtonModule, PopoverModule],
+  imports: [CommonModule, DatePipe, DecimalPipe, CardModule, ButtonModule, PopoverModule, RouterModule],
   templateUrl: './account-transactions.html',
   styleUrl: './account-transactions.scss'
 })
