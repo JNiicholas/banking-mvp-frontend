@@ -1,22 +1,24 @@
 import { Component, ChangeDetectorRef, ChangeDetectionStrategy, OnInit, AfterViewInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 // PrimeNG
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { CardModule } from 'primeng/card';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 // OpenAPI-generated service & models
 import { CustomerAPIApiService } from '../../../api/api/customer-api.service';
-import { CreateAccountRequest, AccountResponse } from '../../../api';
+import { CreateAccountRequest, AccountResponse, CustomerResponse } from '../../../api';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-account',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, MessageModule, CardModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, InputTextModule, ButtonModule, MessageModule, CardModule, AutoCompleteModule],
   templateUrl: './new-account.html',
   styleUrl: './new-account.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,6 +33,11 @@ export class NewAccount implements OnInit, AfterViewInit {
   error?: string;
   created?: AccountResponse;
 
+  // Autocomplete state
+  customers: CustomerResponse[] = [];
+  suggestions: CustomerResponse[] = [];
+  selectedCustomer: CustomerResponse | null = null;
+
   // Accept a UUID only (simple validator; adjust if you support other id shapes)
   private static readonly UUID_REGEX =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -44,6 +51,7 @@ export class NewAccount implements OnInit, AfterViewInit {
   ngOnInit(): void {
     // Ensure first render is styled when running zoneless/hydration
     this.cdr.markForCheck();
+    this.loadCustomers();
   }
 
   ngAfterViewInit(): void {
@@ -105,4 +113,57 @@ export class NewAccount implements OnInit, AfterViewInit {
     }
     this.router.navigate(['/accounts', id, 'transactions']);
   }
-}
+
+
+  /** Load all customers once to power the autocomplete */
+  private loadCustomers(): void {
+    this.api.list().subscribe({
+      next: (res) => {
+        this.customers = Array.isArray(res) ? res : [];
+        // If a prior selection exists, keep the control in sync
+        if (this.selectedCustomer?.id) {
+          this.form.patchValue({ customerId: this.selectedCustomer.id });
+        }
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Failed to load customers for autocomplete', err);
+        this.customers = [];
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  /** PrimeNG p-autocomplete completeMethod handler */
+  filterCustomers(event: { query: string }): void {
+    const q = (event?.query || '').trim().toLowerCase();
+    if (!q) {
+      this.suggestions = [...this.customers];
+    } else {
+      this.suggestions = this.customers.filter((c) => {
+        const first = (c.firstName || '').toLowerCase();
+        const last = (c.lastName || '').toLowerCase();
+        const email = (c.email || '').toLowerCase();
+        return first.includes(q) || last.includes(q) || email.includes(q);
+      });
+    }
+    this.cdr.markForCheck();
+  }
+
+  /** When a customer is picked from the autocomplete list */
+  onPickCustomer(e: any): void {
+    const picked: CustomerResponse | null = e?.value ?? e ?? null;
+    this.selectedCustomer = picked;
+    const id = picked?.id || '';
+    this.form.patchValue({ customerId: id });
+    this.cdr.markForCheck();
+  }
+
+  /** When the clear button is clicked in the autocomplete */
+  onClearCustomer(): void {
+    this.selectedCustomer = null;
+    this.suggestions = [];
+    this.form.patchValue({ customerId: '' });
+    this.cdr.markForCheck();
+  }
+  }

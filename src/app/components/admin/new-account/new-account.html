@@ -51,12 +51,43 @@
         </div>
       </ng-template>
 
-      <!-- If you later load customers for a dropdown, replace this input with p-dropdown -->
       <div class="field">
-        <label for="customerId" class="block mb-1">Customer ID (UUID)</label>
-        <input id="customerId" pInputText formControlName="customerId" placeholder="e.g. 5a197dd7-d4ff-4bd8-afe8-bce2ce395922" />
+        <label for="customerAuto" class="block mb-1">Customer</label>
+        <p-autocomplete
+          [ngModel]="selectedCustomer"
+          (ngModelChange)="selectedCustomer = $event"
+          [suggestions]="suggestions"
+          (completeMethod)="filterCustomers($event)"
+          (onSelect)="onPickCustomer($event)"
+          (onClear)="onClearCustomer()"
+          [dropdown]="true"
+          [forceSelection]="true"
+          [showClear]="true"
+          [minLength]="1"
+          placeholder="Search by name or email"
+          optionLabel="email"
+          inputId="customerAuto"
+          class="w-full"
+        >
+          <ng-template let-c pTemplate="item">
+            <div class="flex items-center gap-2">
+              <span class="font-medium">{{ c.firstName }} {{ c.lastName }}</span>
+              <span class="text-sm opacity-80">{{ c.email }}</span>
+            </div>
+          </ng-template>
+
+          <ng-template pTemplate="selectedItem" let-c>
+            <div class="flex items-center gap-2">
+              <span class="font-medium">{{ c?.firstName }} {{ c?.lastName }}</span>
+              <span class="text-sm opacity-80">{{ c?.email }}</span>
+            </div>
+          </ng-template>
+        </p-autocomplete>
+
+        <!-- Keep the reactive form control in sync and validate -->
+        <input type="hidden" formControlName="customerId" />
         @if (form.get('customerId')?.invalid && (form.get('customerId')?.dirty || form.get('customerId')?.touched)) {
-          <small class="text-red-500">Please provide a valid customer id.</small>
+          <small class="text-red-500">Please select a customer.</small>
         }
       </div>
 
@@ -69,4 +100,3 @@
     </p-card>
   </form>
 }
-
