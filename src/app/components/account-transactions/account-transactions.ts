@@ -18,6 +18,7 @@ import { TransactionResponse } from '../../api';
   templateUrl: './account-transactions.html',
   styleUrl: './account-transactions.scss'
 })
+
 export class AccountTransactions implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private api = inject(AccountAPIApiService);
