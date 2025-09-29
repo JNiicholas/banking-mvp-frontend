@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -13,7 +14,7 @@ import { NewCustomer } from '../new-customer/new-customer';
 @Component({
   selector: 'app-list-customers',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, DialogModule, NewCustomer, RippleModule, TagModule],
+  imports: [CommonModule, RouterModule, TableModule, ButtonModule, DialogModule, NewCustomer, RippleModule, TagModule],
   templateUrl: './list-customers.html',
   styleUrl: './list-customers.scss'
 })

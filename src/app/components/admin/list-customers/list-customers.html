@@ -60,7 +60,11 @@
     </ng-template>
     <ng-template pTemplate="body" let-acc>
       <tr>
-        <td class="font-mono">{{ acc.ibanDisplay || acc.ibanNormalized }}</td>
+        <td class="font-mono">
+          <a [routerLink]="['/accounts', acc.id, 'transactions']" class="underline text-blue-400 hover:text-blue-600">
+            {{ acc.ibanDisplay || acc.ibanNormalized }}
+          </a>
+        </td>
         <td class="text-right">€ {{ acc.balance | number:'1.2-2' }}</td>
       </tr>
     </ng-template>
