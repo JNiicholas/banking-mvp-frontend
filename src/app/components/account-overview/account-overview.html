@@ -8,16 +8,21 @@
   @if (accounts.length > 0) {
     <div class="accounts-grid">
       @for (acc of accounts; track acc.id) {
-        <article class="account-card">
-          <header class="account-header">
-            <div class="iban">{{ acc.ibanDisplay || acc.ibanNormalized }}</div>
-            <small class="country">{{ acc.ibanCountry }}</small>
-          </header>
-          <div class="account-body">
-            <div class="balance-label">Balance</div>
-            <div class="balance-value">{{ acc.balance | number:'1.2-2' }}</div>
-          </div>
-        </article>
+        <p-card [style]="{ 'background-color': '#0d1b2a', 'color': '#e0e0e0', 'border-radius': '8px', 'border': '1px solid #1e3a5f', 'padding': '1rem' }" styleClass="mb-3">
+          <ng-template pTemplate="header">
+            <div class="flex justify-between items-center">
+              <div class="flex items-center">
+                <i class="pi pi-wallet mr-2"></i>
+                <span class="font-semibold text-lg">{{ acc.ibanDisplay || acc.ibanNormalized }}</span>
+              </div>
+              <div class="flex items-center">
+                <span class="balance-label text-sm mr-2">Balance</span>
+                <span class="balance-value font-bold text-xl">{{ acc.balance | number:'1.2-2' }}</span>
+                <span class="ml-1">EUR</span>
+              </div>
+            </div>
+          </ng-template>
+        </p-card>
       } @empty {
         <!-- no items -->
       }
