@@ -1,0 +1,69 @@
+<h2 class="mt-4 mb-3">Create New Account</h2>
+
+<!-- Loading / Error states -->
+@if (loading) {
+  <div>Creating account…</div>
+} @else if (error) {
+  <p-message severity="error" [text]="error"></p-message>
+}
+
+<!-- Success state: show the created account summary -->
+@if (created) {
+  <p-card
+    [style]="{ 'background-color': '#0d1b2a', 'color': '#e0e0e0', 'border-radius': '8px', 'border': '1px solid #1e3a5f', 'padding': '1rem' }"
+    styleClass="mb-3"
+  >
+    @let acc = created;
+    <ng-template pTemplate="header">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center">
+          <i class="pi pi-wallet mr-2"></i>
+          <span class="font-semibold text-lg">{{ acc?.ibanDisplay || acc?.ibanNormalized }}</span>
+        </div>
+        <div class="flex items-center">
+          <span class="text-sm mr-2">Balance</span>
+          <span class="font-bold text-xl">{{ acc?.balance | number:'1.2-2' }}</span>
+          <span class="ml-1">EUR</span>
+        </div>
+      </div>
+    </ng-template>
+
+    <div class="text-sm opacity-80">Account successfully created for customer <strong>{{ created.customerId }}</strong>.</div>
+
+    <ng-template pTemplate="footer">
+      <div class="flex gap-2">
+        <button pButton type="button" icon="pi pi-arrow-left" label="Back" class="p-button-text" (click)="cancel()"></button>
+        <button pButton type="button" icon="pi pi-list" label="View Transactions" class="p-button-outlined" (click)="goToAccount(acc?.id)"></button>
+      </div>
+    </ng-template>
+  </p-card>
+} @else {
+  <!-- Account creation form -->
+  <form [formGroup]="form" (ngSubmit)="create()" class="flex flex-col gap-3 max-w-xl">
+    <p-card>
+      <ng-template pTemplate="header">
+        <div class="flex items-center">
+          <i class="pi pi-user mr-2"></i>
+          <span class="font-semibold">Select Customer</span>
+        </div>
+      </ng-template>
+
+      <!-- If you later load customers for a dropdown, replace this input with p-dropdown -->
+      <div class="field">
+        <label for="customerId" class="block mb-1">Customer ID (UUID)</label>
+        <input id="customerId" pInputText formControlName="customerId" placeholder="e.g. 5a197dd7-d4ff-4bd8-afe8-bce2ce395922" />
+        @if (form.get('customerId')?.invalid && (form.get('customerId')?.dirty || form.get('customerId')?.touched)) {
+          <small class="text-red-500">Please provide a valid customer id.</small>
+        }
+      </div>
+
+      <ng-template pTemplate="footer">
+        <div class="flex gap-2">
+          <button pButton type="button" label="Cancel" class="p-button-text" (click)="cancel()"></button>
+          <button pButton type="submit" icon="pi pi-wallet" label="Create Account" [disabled]="form.invalid || loading"></button>
+        </div>
+      </ng-template>
+    </p-card>
+  </form>
+}
+

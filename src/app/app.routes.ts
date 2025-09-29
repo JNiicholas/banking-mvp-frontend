@@ -23,6 +23,9 @@ import { MapboxMapComponent } from './features/mapbox-map/mapbox-map';
 import { authGuard } from './guards/auth.guard';
 import { AccountTransactions } from './components/account-transactions/account-transactions';
 
+import { ListAccounts } from './components/admin/list-accounts/list-accounts';
+import { NewAccount } from './components/admin/new-account/new-account';
+
 
 
 export const routes: Routes = [
@@ -50,6 +53,8 @@ export const routes: Routes = [
 */
 
   { path: 'customer/my-accounts', component: AccountOverview, canActivate: [authGuard] },
+  { path: 'admin/list-accounts', component: ListAccounts, canActivate: [authGuard] },
+  { path: 'admin/accounts/new', component: NewAccount, canActivate: [authGuard] },
   { path: 'accounts/:id/transactions', component: AccountTransactions, canActivate: [authGuard] },
   { path: '**', redirectTo: '' }
 ];

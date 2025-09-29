@@ -1,0 +1,31 @@
+<h2 class="mt-4 mb-3">Customers</h2>
+
+@if (loading) {
+  <div>Loading customers…</div>
+} @else if (error) {
+  <div class="text-red-500">{{ error }}</div>
+} @else {
+  @if (customers?.length) {
+    <div class="card">
+      <p-table [value]="customers" [tableStyle]="{ 'min-width': '48rem' }" [rowHover]="true">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Email</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-customer>
+          <tr>
+            <td>{{ customer.firstName }}</td>
+            <td>{{ customer.lastName }}</td>
+            <td>{{ customer.email }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  } @else {
+    <p>No customers found.</p>
+  }
+}
