@@ -18,6 +18,7 @@ import { Watchlists } from './components/watchlists/watchlists/watchlists';
 */
 
 import { Frontpage } from './pages/frontpage/frontpage';
+import { AccountOverview } from './components/account-overview/account-overview';
 import { MapboxMapComponent } from './features/mapbox-map/mapbox-map';
 import { authGuard } from './guards/auth.guard';
 
@@ -47,6 +48,7 @@ export const routes: Routes = [
   { path: 'watchlists/new', component: Watchlists, canActivate: [authGuard] },
 */
 
+  { path: 'customer/my-accounts', component: AccountOverview, canActivate: [authGuard] },
   { path: '**', redirectTo: '' }
 ];
 

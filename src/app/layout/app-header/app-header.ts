@@ -1,5 +1,5 @@
-import { CommonModule, AsyncPipe } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule, AsyncPipe, DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { Component, inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { MegaMenuModule } from 'primeng/megamenu';
 import { MegaMenuItem, MenuItem } from 'primeng/api';
 import { NgIf } from '@angular/common';
@@ -19,13 +19,15 @@ import { ChipModule } from 'primeng/chip';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MegaMenuModule, ButtonModule, NgIf, LoginButtonComponent, AvatarModule, AvatarGroupModule, PopoverModule, ChipModule, AsyncPipe],
+  imports: [MegaMenuModule, ButtonModule, AvatarModule, AvatarGroupModule, PopoverModule, ChipModule],
   templateUrl: './app-header.html',
   styleUrls: ['./app-header.scss']
 })
 export class AppHeaderComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private auth = inject(AuthService);
+  private platformId = inject(PLATFORM_ID);
+  private document = inject(DOCUMENT);
 
   isLoggedIn$ = this.auth.isLoggedIn$;
   userLoggedIn: boolean = false;
@@ -61,7 +63,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
             {
               label: 'Account',
               items: [
-                { label: 'Overview', icon: 'pi pi-list', command: () => this.router.navigate(['/customer/overview'], { skipLocationChange: true, replaceUrl: true }) }
+                { label: 'My Accounts', icon: 'pi pi-wallet', command: () => this.router.navigate(['/customer/my-accounts'], { skipLocationChange: true, replaceUrl: true }) }
               ]
             }
           ]
@@ -113,17 +115,18 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
       this.subscriptions.add(maybeTokenChange$.subscribe(() => this.refreshUserFromToken()));
     }
 
-    // Also refresh when tab becomes visible (covers return-from-login flows)
-    this.subscriptions.add(
-      fromEvent(document, 'visibilitychange').subscribe(() => {
-        if (document.visibilityState === 'visible') {
-          this.refreshUserFromToken();
-        }
-      })
-    );
+    if (isPlatformBrowser(this.platformId)) {
+      this.subscriptions.add(
+        fromEvent(this.document, 'visibilitychange').subscribe(() => {
+          if (this.document.visibilityState === 'visible') {
+            this.refreshUserFromToken();
+          }
+        })
+      );
+    }
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
-  }
+}

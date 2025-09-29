@@ -11,16 +11,20 @@
                Retail Banking – Customer & Account MVP
             </p>
 
-            <div class="flex gap-3 mt-2">
-                <button pButton label="Explore Dividends" icon="pi pi-percentage" routerLink="/dividends/ttm"></button>
-                <button pButton label="Financial Screeners" icon="pi pi-sliders-h" class="p-button-outlined"
-                    routerLink="/financials/advanced-screener"></button>
-               <!-- <button pButton label="AI Screener" icon="pi pi-microchip-ai" class="p-button-outlined"
-                    routerLink="/ai-screener"></button>-->
-                <button pButton class="p-button-outlined" routerLink="/financials/ai">
-                    <i class="fas fa-robot mr-2"></i> AI analysis
-                </button>
-            </div>
+            @if (auth.hasRealmRole('admin')) {
+              <div class="flex gap-3 mt-2">
+                  <button pButton label="List Customers" icon="pi pi-users" routerLink="/customers"></button>
+                  <button pButton label="Create Customer" icon="pi pi-user-plus" class="p-button-outlined" routerLink="/customers/new"></button>
+                  <button pButton label="Create New Account" icon="pi pi-wallet" class="p-button-outlined" routerLink="/accounts/new"></button>
+              </div>
+            }
+
+            @if (auth.hasRealmRole('user')) {
+              <div class="flex gap-3 mt-2">
+                  <button pButton label="My Accounts" icon="pi pi-credit-card" routerLink="/accounts"></button>
+                  <button pButton label="New Transfer" icon="pi pi-send" class="p-button-outlined" routerLink="/transfers/new"></button>
+              </div>
+            }
 
             <span
                 class="animate-bounce h-8 w-8 bg-primary text-primary-contrast rounded-full inline-flex items-center justify-center mt-10">

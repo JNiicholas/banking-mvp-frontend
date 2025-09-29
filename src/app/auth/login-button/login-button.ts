@@ -7,7 +7,7 @@ import { AuthService } from '../../services/auth';
 @Component({
   selector: 'app-login-button',
   standalone: true,
-  imports: [ButtonModule, AsyncPipe, NgIf], // <-- AsyncPipe imported here
+  imports: [ButtonModule, AsyncPipe], // <-- AsyncPipe imported here
   templateUrl: './login-button.html'
 })
 export class LoginButtonComponent implements OnInit {

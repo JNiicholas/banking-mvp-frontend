@@ -1,0 +1,28 @@
+<h2 class="mb-3">My Accounts</h2>
+
+@if (loading) {
+  <div>Loading accounts…</div>
+} @else if (error) {
+  <div class="text-red-500">{{ error }}</div>
+} @else {
+  @if (accounts.length > 0) {
+    <div class="accounts-grid">
+      @for (acc of accounts; track acc.id) {
+        <article class="account-card">
+          <header class="account-header">
+            <div class="iban">{{ acc.ibanDisplay || acc.ibanNormalized }}</div>
+            <small class="country">{{ acc.ibanCountry }}</small>
+          </header>
+          <div class="account-body">
+            <div class="balance-label">Balance</div>
+            <div class="balance-value">{{ acc.balance | number:'1.2-2' }}</div>
+          </div>
+        </article>
+      } @empty {
+        <!-- no items -->
+      }
+    </div>
+  } @else {
+    <p>No accounts found.</p>
+  }
+}

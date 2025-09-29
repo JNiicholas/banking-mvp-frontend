@@ -9,6 +9,7 @@ configuration.ts
 encoder.ts
 git_push.sh
 model/account-response.ts
+model/account-summary-response.ts
 model/account-summary.ts
 model/amount-request.ts
 model/create-account-request.ts
