@@ -10,7 +10,6 @@ import { Location } from '@angular/common';
 
 import { AccountAPIApiService } from '../../api/api/account-api.service';
 import { TransactionResponse } from '../../api';
-
 @Component({
   selector: 'app-account-transactions',
   standalone: true,
