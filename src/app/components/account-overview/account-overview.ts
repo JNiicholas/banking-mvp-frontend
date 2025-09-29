@@ -6,6 +6,7 @@ import { PopoverModule } from 'primeng/popover';
 
 import { AccountAPIApiService } from '../../api/api/account-api.service';
 import { AccountSummaryResponse } from '../../api';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account-overview',
@@ -21,6 +22,7 @@ export class AccountOverview implements OnInit {
 
   private api = inject(AccountAPIApiService);
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.loading = true;
@@ -40,6 +42,18 @@ export class AccountOverview implements OnInit {
         this.cdr.markForCheck();
       },
     });
+  }
+
+  openAccount(id?: string): void {
+    if (!id) {
+      console.warn('openAccount called without an id');
+      return;
+    }
+    this.router.navigate(['/accounts', id, 'transactions']);
+  }
+
+  stop(event: Event): void {
+    event.stopPropagation();
   }
 
   trackById = (_: number, a: AccountSummaryResponse) => a.id ?? _;

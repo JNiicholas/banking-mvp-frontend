@@ -21,6 +21,7 @@ import { Frontpage } from './pages/frontpage/frontpage';
 import { AccountOverview } from './components/account-overview/account-overview';
 import { MapboxMapComponent } from './features/mapbox-map/mapbox-map';
 import { authGuard } from './guards/auth.guard';
+import { AccountTransactions } from './components/account-transactions/account-transactions';
 
 
 
@@ -49,6 +50,7 @@ export const routes: Routes = [
 */
 
   { path: 'customer/my-accounts', component: AccountOverview, canActivate: [authGuard] },
+  { path: 'accounts/:id/transactions', component: AccountTransactions, canActivate: [authGuard] },
   { path: '**', redirectTo: '' }
 ];
 

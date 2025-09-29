@@ -8,7 +8,15 @@
   @if (accounts.length > 0) {
     <div class="accounts-grid">
       @for (acc of accounts; track acc.id) {
-        <p-card [style]="{ 'background-color': '#0d1b2a', 'color': '#e0e0e0', 'border-radius': '8px', 'border': '1px solid #1e3a5f', 'padding': '1rem' }" styleClass="mb-3">
+        <p-card
+          [style]="{ 'background-color': '#0d1b2a', 'color': '#e0e0e0', 'border-radius': '8px', 'border': '1px solid #1e3a5f', 'padding': '1rem', 'cursor': 'pointer' }"
+          styleClass="mb-3"
+          (click)="openAccount(acc.id)"
+          (keydown.enter)="openAccount(acc.id)"
+          (keydown.space)="$event.preventDefault(); openAccount(acc.id)"
+          tabindex="0"
+          role="button"
+        >
           <ng-template pTemplate="header">
             <div class="flex justify-between items-center">
               <div class="flex items-center">
@@ -30,7 +38,7 @@
                 class="p-button-text p-button-sm"
                 icon="pi pi-info-circle"
                 label="Debug info"
-                (click)="op.toggle($event)"
+                (click)="$event.stopPropagation(); op.toggle($event)"
               ></button>
 
               <p-popover #op>

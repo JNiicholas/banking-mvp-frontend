@@ -1,0 +1,66 @@
+<h2 class="mt-4 mb-3">Account Transactions</h2>
+
+@if (loading) {
+  <div>Loading transactions…</div>
+} @else if (error) {
+  <div class="text-red-500">{{ error }}</div>
+} @else {
+  @if (transactions.length > 0) {
+    <div class="transactions-grid">
+      @for (tx of transactions; track tx.id) {
+        <p-card
+          [style]="{ 'background-color': '#0d1b2a', 'color': '#e0e0e0', 'border-radius': '8px', 'border': '1px solid #1e3a5f', 'padding': '1rem' }"
+          styleClass="mb-3"
+        >
+          <ng-template pTemplate="header">
+            <div class="flex justify-between items-center">
+              <div class="flex items-center">
+                <i class="pi mr-2" [ngClass]="{ 'pi-arrow-up-right': tx.type === 'DEPOSIT', 'pi-arrow-down-left': tx.type !== 'DEPOSIT' }"></i>
+                <span class="font-semibold text-lg">{{ tx.type }}</span>
+              </div>
+              <div class="text-sm opacity-80">
+                {{ tx.timestamp | date: 'yyyy-MM-dd HH:mm' }}
+              </div>
+            </div>
+          </ng-template>
+
+          <div class="flex justify-between items-center">
+            <div>
+              <div class="text-sm opacity-80">Amount</div>
+              <div class="font-bold text-xl">
+                {{ tx.amount | number: '1.2-2' }} <span class="text-sm">EUR</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-sm opacity-80">Balance after</div>
+              <div class="font-bold text-xl">
+                {{ tx.balanceAfter | number: '1.2-2' }} <span class="text-sm">EUR</span>
+              </div>
+            </div>
+          </div>
+
+          <ng-template pTemplate="footer">
+            <div class="flex items-center">
+              <button
+                pButton
+                type="button"
+                class="p-button-text p-button-sm"
+                icon="pi pi-info-circle"
+                label="Debug info"
+                (click)="$event.stopPropagation(); pop.toggle($event)"
+              ></button>
+
+              <p-popover #pop>
+                <pre class="text-xs m-0">{{ tx | json }}</pre>
+              </p-popover>
+            </div>
+          </ng-template>
+        </p-card>
+      } @empty {
+        <!-- no items -->
+      }
+    </div>
+  } @else {
+    <p>No transactions found.</p>
+  }
+}
