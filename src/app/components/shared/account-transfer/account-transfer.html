@@ -1,0 +1,61 @@
+<button
+  pButton
+  type="button"
+  icon="pi pi-euro"
+  label="Transfer"
+  class="p-button-sm"
+  (click)="transfer.toggle($event); open()"
+></button>
+
+<p-popover #transfer [dismissable]="true">
+  <div class="flex flex-col gap-3 p-2" (click)="stop($event)">
+    <div class="font-medium">{{ actionLabel }}</div>
+
+    <div class="flex items-center gap-2">
+      <label for="amount" class="text-sm">Amount</label>
+      <p-inputNumber
+        [(ngModel)]="amount"
+        [showButtons]="true"
+        buttonLayout="horizontal"
+        inputId="horizontal"
+        spinnerMode="horizontal"
+        [step]="0.25"
+        mode="currency"
+        currency="EUR"
+      >
+        <ng-template #incrementbuttonicon>
+          <span class="pi pi-plus"></span>
+        </ng-template>
+        <ng-template #decrementbuttonicon>
+          <span class="pi pi-minus"></span>
+        </ng-template>
+      </p-inputNumber>
+    </div>
+
+    <div class="text-xs text-surface-500">Enter positive to deposit, negative to withdraw.</div>
+
+    @if (error) {
+      <div class="text-red-500 text-sm">{{ error }}</div>
+    }
+
+    <div class="flex justify-end gap-2 pt-2">
+      <button
+        pButton
+        type="button"
+        label="Cancel"
+        class="p-button-text"
+        [disabled]="submitting"
+        (click)="cancel(); transfer.hide()"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        icon="pi pi-euro"
+        label="Transfer"
+        [disabled]="submitting || amount === null || amount === undefined || isNaN(amount)"
+        (click)="confirm(); transfer.hide()"
+      ></button>
+    </div>
+  </div>
+</p-popover>

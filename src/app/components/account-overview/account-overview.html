@@ -31,19 +31,29 @@
             </div>
           </ng-template>
           <ng-template pTemplate="footer">
-            <div class="flex items-center">
-              <button
-                pButton
-                type="button"
-                class="p-button-text p-button-sm"
-                icon="pi pi-info-circle"
-                label="Debug info"
-                (click)="$event.stopPropagation(); op.toggle($event)"
-              ></button>
+            <div class="flex justify-between items-center">
+              <div class="flex items-center">
+                <button
+                  pButton
+                  type="button"
+                  class="p-button-text p-button-sm"
+                  icon="pi pi-info-circle"
+                  label="Debug info"
+                  (click)="$event.stopPropagation(); op.toggle($event)"
+                ></button>
 
-              <p-popover #op>
-                <pre class="text-xs m-0">{{ acc | json }}</pre>
-              </p-popover>
+                <p-popover #op>
+                  <pre class="text-xs m-0">{{ acc | json }}</pre>
+                </p-popover>
+              </div>
+
+              <app-account-transfer
+                [accountId]="acc.id!"
+                (completed)="ngOnInit()"
+                (click)="$event.stopPropagation()"
+                (keydown.enter)="$event.stopPropagation()"
+                (keydown.space)="$event.stopPropagation()"
+              ></app-account-transfer>
             </div>
           </ng-template>
         </p-card>

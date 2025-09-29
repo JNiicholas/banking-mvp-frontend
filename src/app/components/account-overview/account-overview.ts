@@ -7,11 +7,12 @@ import { PopoverModule } from 'primeng/popover';
 import { AccountAPIApiService } from '../../api/api/account-api.service';
 import { AccountSummaryResponse } from '../../api';
 import { Router } from '@angular/router';
+import { AccountTransfer } from '../shared/account-transfer/account-transfer';
 
 @Component({
   selector: 'app-account-overview',
   standalone: true,
-  imports: [CommonModule, DecimalPipe, CardModule, ButtonModule, PopoverModule],
+  imports: [CommonModule, DecimalPipe, CardModule, ButtonModule, PopoverModule, AccountTransfer],
   templateUrl: './account-overview.html',
   styleUrl: './account-overview.scss'
 })
