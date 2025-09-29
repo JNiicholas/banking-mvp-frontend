@@ -8,6 +8,17 @@
   @if (customers?.length) {
     <div class="card">
       <p-table [value]="customers" [tableStyle]="{ 'min-width': '48rem' }" [rowHover]="true">
+        <ng-template pTemplate="caption">
+          <div class="flex items-center justify-between">
+            <span class="text-xl font-bold">Customers</span>
+            <p-button
+              icon="pi pi-user-plus"
+              label="Add customer"
+              (onClick)="openCreate()"
+              raised
+            />
+          </div>
+        </ng-template>
         <ng-template pTemplate="header">
           <tr>
             <th>First name</th>
@@ -29,3 +40,19 @@
     <p>No customers found.</p>
   }
 }
+
+<!-- Create Customer Dialog -->
+<p-dialog
+  [(visible)]="showCreate"
+  [modal]="true"
+  [dismissableMask]="true"
+  [closable]="true"
+  [draggable]="false"
+  styleClass="w-full md:w-9/12 lg:w-6/12"
+  (onHide)="onCreateCancelled()"
+>
+  <app-new-customer
+    (created)="onCustomerCreated()"
+    (cancelled)="onCreateCancelled()"
+  ></app-new-customer>
+</p-dialog>
