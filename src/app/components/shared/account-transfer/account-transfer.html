@@ -54,7 +54,7 @@
         icon="pi pi-euro"
         label="Transfer"
         [disabled]="submitting || amount === null || amount === undefined || isNaN(amount)"
-        (click)="confirm(); transfer.hide()"
+        (click)="confirm()"
       ></button>
     </div>
   </div>

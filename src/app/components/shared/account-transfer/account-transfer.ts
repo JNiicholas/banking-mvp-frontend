@@ -118,8 +118,32 @@ export class AccountTransfer {
 
   private finishError(err: unknown): void {
     console.error('Transfer failed', err);
+
+    // Default message
+    let msg = 'Transfer failed. Please try again.';
+
+    // Try to extract a human-friendly message from the backend error
+    try {
+      const e: any = err as any;
+      const payload = e?.error ?? e; // HttpErrorResponse.error or plain object
+      const serverMsg: unknown = payload?.message ?? payload?.error ?? payload?.detail;
+
+      if (typeof serverMsg === 'string' && serverMsg.trim().length > 0) {
+        msg = serverMsg;
+      }
+
+      // Normalize known cases
+      if (/insufficient\s+funds/i.test(String(serverMsg) || JSON.stringify(payload))) {
+        msg = 'Insufficient funds.';
+      }
+    } catch {
+      // ignore, keep default message
+    }
+
+    // Do not close the overlay on error — keep it open so the user can see the message
     this.submitting = false;
-    this.error = 'Transfer failed. Please try again.';
+    this.visible = true;
+    this.error = msg;
     this.cdr.markForCheck();
   }
 }

@@ -5,7 +5,7 @@
 } @else if (error) {
 <div class="text-red-500">{{ error }}</div>
 } @else {
-@if (customers?.length) {
+@if (customers.length) {
 <div class="card">
   <p-table [value]="customers" dataKey="id" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)"
     (onRowCollapse)="onRowCollapse($event)" [tableStyle]="{ 'min-width': '50rem' }">
@@ -14,10 +14,6 @@
         <span class="text-xl font-bold">Customers</span>
         <div class="flex gap-2">
           <p-button label="Add Customer" icon="pi pi-user-plus" (onClick)="openCreate()" />
-          <!-- optional:
-        <p-button label="Expand All" icon="pi pi-plus" text (onClick)="expandAll()" />
-        <p-button label="Collapse All" icon="pi pi-minus" text (onClick)="collapseAll()" />
-        -->
         </div>
       </div>
     </ng-template>

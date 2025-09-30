@@ -20,11 +20,6 @@ import { importProvidersFrom } from '@angular/core';
 import { Configuration } from './api/configuration';
 import { apiProviders } from './providers/providers';
 import { AuthService } from './services/auth';
-import { MAPBOX_TOKEN } from './providers/mapbox-token';
-
-
-
-
 import { BaseUrlInterceptor } from './services/base-url/base-url.interceptor';
 
 
@@ -82,24 +77,6 @@ export function initializeKeycloak(keycloak: KeycloakService, auth: AuthService)
 const AuraPreset = definePreset(Aura);
 const MaterialPreset = definePreset(Material);
 const LaraPreset = definePreset(Lara);
-// Optional neutral/gray variant of Aura (less green primary)
-// const AuraNeutralPreset = definePreset(Aura, {
-//   semantic: {
-//     primary: {
-//       50: '{neutral.100}',
-//       100: '{neutral.200}',
-//       200: '{neutral.300}',
-//       300: '{neutral.400}',
-//       400: '{neutral.500}',
-//       500: '{neutral.600}',
-//       600: '{neutral.700}',
-//       700: '{neutral.800}',
-//       800: '{neutral.900}',
-//       900: '{neutral.950}',
-//       950: '{neutral.950}'
-//     }
-//   }
-// });
 
 const AuraBluePreset = definePreset(Aura, {
   semantic: {
@@ -130,7 +107,6 @@ export const appConfig: ApplicationConfig = {
       provide: Configuration,
       useFactory: () => new Configuration({ basePath: 'http://localhost:8080' }),
     },
-  { provide: MAPBOX_TOKEN, useValue: env.mapboxAccessToken },
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
   provideRouter(routes),
