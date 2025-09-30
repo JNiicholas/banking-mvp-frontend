@@ -1,4 +1,4 @@
-<h2 class="mt-4 mb-3">Create New Account</h2>
+<h2 class="mt-4 mb-3">New Account</h2>
 
 <!-- Loading / Error states -->
 @if (loading) {
@@ -28,11 +28,14 @@
       </div>
     </ng-template>
 
-    <div class="text-sm opacity-80">Account successfully created for customer <strong>{{ created.customerId }}</strong>.</div>
+    <div class="text-sm opacity-80">
+      Account successfully created for customer
+      <strong>{{ createdCustomer?.firstName }} {{ createdCustomer?.lastName }}</strong>
+      ({{ createdCustomer?.email }}).
+    </div>
 
     <ng-template pTemplate="footer">
       <div class="flex gap-2">
-        <button pButton type="button" icon="pi pi-arrow-left" label="Back" class="p-button-text" (click)="cancel()"></button>
         <button pButton type="button" icon="pi pi-list" label="View Transactions" class="p-button-outlined" (click)="goToAccount(acc?.id)"></button>
       </div>
     </ng-template>
@@ -56,6 +59,7 @@
         <p-autocomplete
           [ngModel]="selectedCustomer"
           (ngModelChange)="selectedCustomer = $event"
+          [ngModelOptions]="{standalone: true}"
           [suggestions]="suggestions"
           (completeMethod)="filterCustomers($event)"
           (onSelect)="onPickCustomer($event)"

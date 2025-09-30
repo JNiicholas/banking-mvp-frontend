@@ -32,6 +32,7 @@ export class NewAccount implements OnInit, AfterViewInit {
   loading = false;
   error?: string;
   created?: AccountResponse;
+  createdCustomer?: CustomerResponse;
 
   // Autocomplete state
   customers: CustomerResponse[] = [];
@@ -76,6 +77,9 @@ export class NewAccount implements OnInit, AfterViewInit {
     this.api.createAccount({ createAccountRequest: payload }).subscribe({
       next: (res: AccountResponse) => {
         this.created = res;
+        if (res?.customerId) {
+          this.fetchCustomerDetails(res.customerId);
+        }
         this.loading = false;
         this.cdr.markForCheck();
       },
@@ -129,6 +133,24 @@ export class NewAccount implements OnInit, AfterViewInit {
       error: (err) => {
         console.error('Failed to load customers for autocomplete', err);
         this.customers = [];
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  /** Fetch the created account's customer details for display (name/email). */
+  private fetchCustomerDetails(id: string): void {
+    this.api.getById({ id }).subscribe({
+      next: (cust: CustomerResponse) => {
+        this.createdCustomer = cust;
+        // Keep selectedCustomer in sync so UI can reuse it
+        this.selectedCustomer = cust ?? null;
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Failed to fetch customer by id', err);
+        // Non-fatal for the create flow; we just won’t show name/email
+        this.createdCustomer = undefined;
         this.cdr.markForCheck();
       },
     });
